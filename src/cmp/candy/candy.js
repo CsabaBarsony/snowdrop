@@ -27,10 +27,10 @@ Candy.prototype.render = function() {
     this.container.innerHTML = template(this.model)
 
     const button = this.container.querySelector('button')
-    button && button.addEventListener('click', this.getMessage.bind(this))
+    button && button.addEventListener('click', this.buttonClick.bind(this))
 }
 
-Candy.prototype.getMessage = function() {
+Candy.prototype.buttonClick = function() {
     this.model.loading = true
     this.render()
 
