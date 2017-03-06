@@ -19,6 +19,7 @@
     "karma-chrome-launcher": "^2.0.0",
     "karma-jasmine": "^1.1.0",
     "pubsub-js": "^1.5.5",
+    "scion-core": "^1.2.1",
     "watchify": "^3.9.0"
   },
   "repository": {
