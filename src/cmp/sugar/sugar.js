@@ -1,5 +1,7 @@
 const Statechart = require('scion-core').Statechart
 const Handlebars = require('handlebars')
+const PubSub = require('pubsub-js')
+const events = require('../../events.js')
 
 let sc
 
@@ -83,7 +85,8 @@ function Sugar(container, onType) {
         },
         chosen: {
             entry: () => {
-                container.querySelector('input').value = this.model.suggestions[this.model.selectedIndex].text
+                PubSub.publish(events.FOOD_SELECTED, this.model.suggestions[this.model.selectedIndex].data)
+                container.querySelector('input').value = ''
                 this.model.suggestions = []
                 this.render()
             }
@@ -202,7 +205,7 @@ function Sugar(container, onType) {
         }
     ]
 
-    sc = new Statechart({ states: states }, { logStatesEnteredAndExited: true })
+    sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
     sc.start()
 
     this.render()
@@ -225,8 +228,7 @@ Sugar.prototype.render = function() {
     })
 
     const template = Handlebars.compile(templateString)
-    const HTMLString = template(this.model)
-    this.container.querySelector('.content').innerHTML = HTMLString
+    this.container.querySelector('.content').innerHTML = template(this.model)
 }
 
 Sugar.prototype.focus = function() {

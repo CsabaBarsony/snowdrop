@@ -24,7 +24,7 @@ const store = {
 
         setTimeout(() => {
             callback(foods)
-        }, 300)
+        }, 100)
     },
     // for sample test Candy
     getMessage: function(callback) {
