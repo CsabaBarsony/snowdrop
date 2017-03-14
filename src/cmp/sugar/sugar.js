@@ -85,7 +85,7 @@ function Sugar(container, onType) {
         },
         chosen: {
             entry: () => {
-                PubSub.publish(events.FOOD_SELECTED, this.model.suggestions[this.model.selectedIndex].data)
+                PubSub.publish(events.FOOD_SELECT, this.model.suggestions[this.model.selectedIndex].data)
                 container.querySelector('input').value = ''
                 this.model.suggestions = []
                 this.render()

@@ -1,5 +1,6 @@
 const events = {
-    FOOD_SELECTED: 'FOOD_SELECTED'
+    FOOD_SELECT: 'FOOD_SELECT',
+    INGREDIENTS_CHANGE: 'INGREDIENTS_CHANGE'
 }
 
 module.exports = events
