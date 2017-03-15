@@ -9,16 +9,30 @@ function Nutrient(type, amount) {
 }
 
 /**
+ * @param {Nutrient} ch
+ * @param {Nutrient} fat
+ * @param {Nutrient} protein
+ * @constructor
+ */
+function Macros(ch, fat, protein) {
+    this.ch      = ch
+    this.fat     = fat
+    this.protein = protein
+}
+
+/**
  * @param {String}     id
  * @param {String}     name
- * @param {Nutrient[]} nutrients
+ * @param {Macros}     macros
+ * @param {Nutrient[]} [nutrients]
  * @param {String}     [description]
  * @param {Portion}    [portion]
  * @constructor
  */
-function Food(id, name, nutrients, description = '', portion = null) {
+function Food(id, name, macros, nutrients = [], description = '', portion = null) {
     this.id          = id
     this.name        = name
+    this.macros      = macros
     this.nutrients   = nutrients
     this.description = description
     this.portion     = portion
@@ -28,7 +42,7 @@ function Food(id, name, nutrients, description = '', portion = null) {
  * @param {Food}   food
  * @param {Number} amount - Amount of units.
  * @param {Unit}   unit
- * @param {Number} grams
+ * @param {Number} [grams]
  * @constructor
  */
 function Ingredient(food, amount, unit, grams) {
@@ -102,6 +116,7 @@ const Unit = {
 
 const food = {
     Nutrient: Nutrient,
+    Macros: Macros,
     Food: Food,
     Ingredient: Ingredient,
     Meal: Meal,

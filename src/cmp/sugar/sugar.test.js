@@ -11,15 +11,17 @@ const suggestions = [
 let sugar
 
 describe('Sugar entering input', () => {
-    const onType = (text, callback) => {
-        setTimeout(() => {
-            callback(suggestions)
-        }, 0)
-    }
+    beforeEach(() => {
+        const onType = (text, callback) => {
+            setTimeout(() => {
+                callback(suggestions)
+            }, 0)
+        }
 
-    sugar = new Sugar(document.createElement('div'), onType)
-    sugar.focus()
-    sugar.input({ target: { value: 'c' } })
+        sugar = new Sugar(document.createElement('div'), onType)
+        sugar.focus()
+        sugar.input({ target: { value: 'c' } })
+    })
 
     it('should be loading', () => {
         expect(sugar.model.loading).toBeTruthy()

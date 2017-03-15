@@ -1,7 +1,7 @@
 const Sugar = require('../cmp/sugar/sugar.js')
 const Ingrid = require('../cmp/ingrid/ingrid.js')
+const Pie = require('../cmp/pie/pie.js')
 const Suggestion = require('../cmp/sugar/suggestion.js')
-const PubSub = require('pubsub-js');
 const store = require('../store.js')
 
 new Sugar(document.getElementById('cont-sugar'), (text, callback) => {
@@ -13,3 +13,5 @@ new Sugar(document.getElementById('cont-sugar'), (text, callback) => {
 })
 
 new Ingrid(document.getElementById('cont-ingrid'))
+
+new Pie(document.getElementById('cont-pie'))

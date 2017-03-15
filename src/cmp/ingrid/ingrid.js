@@ -42,8 +42,7 @@ Ingrid.prototype.render = function() {
             {{/if}}
             </li>
         {{/each}}
-        </ul>
-        `
+        </ul>`
 
     Handlebars.registerHelper('editing', index => {
         return index === this.model.editingIngredientIndex
@@ -69,12 +68,12 @@ Ingrid.prototype.save = function(e) {
 }
 
 Ingrid.prototype.cancel = function(e) {
-    delete this.model.ingredients[e.target.parentNode.dataset.index]
+    this.model.ingredients.splice(e.target.parentNode.dataset.index, 1)
     this.render()
 }
 
 Ingrid.prototype.remove = function(e) {
-    delete this.model.ingredients[e.target.parentNode.dataset.index]
+    this.model.ingredients.splice(e.target.parentNode.dataset.index, 1)
     this.render()
     PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
 }
