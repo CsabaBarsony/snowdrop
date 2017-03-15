@@ -13,23 +13,9 @@ function Pie(container) {
     }
 
     PubSub.subscribe(events.INGREDIENTS_CHANGE, (e, ingredients) => {
-        if(ingredients.length) {
-            const macros = Pie.calculateMacros(ingredients)
-
-            this.model = {
-                display: true,
-                macros: {
-                    ch: macros.ch.amount,
-                    fat: macros.fat.amount,
-                    protein: macros.protein.amount
-                }
-            }
-        }
-        else {
-            this.model = {
-                display: false,
-                macros: null
-            }
+        this.model = {
+            display: ingredients.length > 0,
+            macros: Pie.calculateMacros(ingredients)
         }
 
         this.render()
@@ -40,9 +26,9 @@ Pie.prototype.render = function() {
     const templateString = `
     {{#if display}}
         <div>
-            <div>ch: {{macros.ch}}</div>
-            <div>fat: {{macros.fat}}</div>
-            <div>protein: {{macros.protein}}</div>
+            <div>ch: {{macros.ch.amount}}</div>
+            <div>fat: {{macros.fat.amount}}</div>
+            <div>protein: {{macros.protein.amount}}</div>
         </div>
     {{/if}}`
 

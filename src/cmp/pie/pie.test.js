@@ -16,6 +16,12 @@ const macros = new Macros(
     new Nutrient(NutrientType.PROTEIN, 10)
 )
 
+const macrosResult = new Macros(
+    new Nutrient(NutrientType.CARBOHYDRATE, 25),
+    new Nutrient(NutrientType.FAT, 50),
+    new Nutrient(NutrientType.PROTEIN, 25)
+)
+
 const ingredients = [
     new Ingredient(new Food('1', 'avocado', macros), 100, Unit.G),
     new Ingredient(new Food('1', 'broccoli', macros), 100, Unit.G)
@@ -26,35 +32,18 @@ describe('Pie', () => {
 
     beforeEach(done => {
         pie = new Pie(document.createElement('div'))
-
-        PubSub.subscribe(events.INGREDIENTS_CHANGE, () => {
-            done()
-        })
-
+        PubSub.subscribe(events.INGREDIENTS_CHANGE, () => { done() })
         PubSub.publish(events.INGREDIENTS_CHANGE, ingredients)
     })
 
     it('should', done => {
-        expect(pie.model).toEqual({
-            display: true,
-            macros: {
-                ch: 25,
-                fat: 50,
-                protein: 25
-            }
-        })
+        expect(pie.model).toEqual({ display: true, macros: macrosResult })
         done()
     })
 })
 
 describe('Pie', () => {
-    const macros = new Macros(
-        new Nutrient(NutrientType.CARBOHYDRATE, 25),
-        new Nutrient(NutrientType.FAT, 50),
-        new Nutrient(NutrientType.PROTEIN, 25)
-    )
-
     it('calculateMacros should calculate macros', () => {
-        expect(Pie.calculateMacros(ingredients)).toEqual(macros)
+        expect(Pie.calculateMacros(ingredients)).toEqual(macrosResult)
     })
 })
