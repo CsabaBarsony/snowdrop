@@ -25,7 +25,7 @@ function Pie(container) {
 Pie.prototype.render = function() {
     const templateString = `
     {{#if display}}
-        <div>
+        <div class="cmp pie">
             <div>ch: {{macros.ch.amount}}</div>
             <div>fat: {{macros.fat.amount}}</div>
             <div>protein: {{macros.protein.amount}}</div>

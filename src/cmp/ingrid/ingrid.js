@@ -21,7 +21,7 @@ function Ingrid(container) {
 
 Ingrid.prototype.render = function() {
     const templateString = `
-        <ul>
+        <ul class="cmp ingrid">
         {{#each ingredients}}
             <li data-index="{{@index}}">
             {{#if (editing @index)}}

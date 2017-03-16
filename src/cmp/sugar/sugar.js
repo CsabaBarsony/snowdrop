@@ -14,9 +14,9 @@ function Sugar(container, onType) {
     }
 
     this.container.innerHTML = `
-        <div class="cmp-sugar">
+        <div class="cmp sugar">
             <input type="text" />
-            <div class="content"></div>
+            <div class="dropdown"></div>
         </div>`
 
     this.container.querySelector('input').addEventListener('focus', this.focus.bind(this))
@@ -228,7 +228,7 @@ Sugar.prototype.render = function() {
     })
 
     const template = Handlebars.compile(templateString)
-    this.container.querySelector('.content').innerHTML = template(this.model)
+    this.container.querySelector('.dropdown').innerHTML = template(this.model)
 }
 
 Sugar.prototype.focus = function() {
