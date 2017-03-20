@@ -27,13 +27,13 @@ describe('Ingrid', () => {
         ingridInstance.model.ingredients = ingredients
     })
 
-    it('should remove the first ingredient', () => {
+    it('remove should remove the first ingredient', () => {
         ingridInstance.remove(0)
         expect(ingridInstance.model.ingredients.length).toBe(1)
         expect(ingridInstance.model.ingredients[0].food.name).toBe('broccoli')
     })
 
-    it('should remove the last ingredient', () => {
+    it('remove should remove the last ingredient', () => {
         ingridInstance.remove(1)
         expect(ingridInstance.model.ingredients.length).toBe(1)
         expect(ingridInstance.model.ingredients[0].food.name).toBe('avocado')

@@ -94,11 +94,12 @@ Ingrid.prototype.render = function() {
     })
 }
 
-Ingrid.prototype.save = function(index, amount, unit) {
+Ingrid.prototype.save = function(index) {
     const ingredient = this.model.ingredients[index]
+    const item = this.container.querySelector('[data-index="' + index + '"]')
 
-    ingredient.amount = amount
-    ingredient.unit = unit
+    ingredient.amount = parseInt(item.querySelector('input').value)
+    ingredient.unit = item.querySelector('select').value
     this.model.editingIngredientIndex = -1
     this.render()
     PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
