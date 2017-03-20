@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example - Pie</title>
+    <link rel="stylesheet" href="../../../public/css/app.css">
+    <link rel="stylesheet" href="../../../public/css/example.css">
+    <link rel="stylesheet" href="../../../public/css/pie.css">
+</head>
+<body>
+<h1>Example - Pie</h1>
+    <div class="cont-example">
+        <div class="cmp pie">
+            <canvas width="200" height="200"></canvas>
+            <table>
+                <tbody><tr>
+                    <td>
+                        <div class="nutrient_marker b-color1"></div>
+                    </td>
+                    <td>carbohydrate: </td>
+                    <td>30%</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="nutrient_marker b-color2"></div>
+                    </td>
+                    <td>fat: </td>
+                    <td>30%</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="nutrient_marker b-color4"></div>
+                    </td>
+                    <td>protein: </td>
+                    <td>40%</td>
+                </tr>
+                </tbody></table>
+        </div>
+    </div>
+    <script>
+        const canvas = document.querySelector('canvas')
+        if(canvas) {
+            var ctx = canvas.getContext('2d')
+            var centerX = 100
+            var centerY = 100
+            var angleZeroX = 200
+            var angleZeroY = 100
+            var radius = 100
+            var angleFat = 30 / 50
+            var angleProtein = 40 / 50
+
+            ctx.beginPath()
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false)
+            ctx.fillStyle = '#588C7E'
+            ctx.fill()
+            ctx.closePath()
+
+            ctx.fillStyle = '#F2E394'
+            ctx.beginPath()
+            ctx.moveTo(centerX, centerY)
+            ctx.lineTo(angleZeroX, angleZeroY)
+            ctx.arc(centerX, centerY, radius, 0, angleFat * Math.PI)
+            ctx.closePath()
+            ctx.fill()
+
+            ctx.fillStyle = '#D96459'
+            ctx.beginPath()
+            ctx.moveTo(centerX, centerY)
+            ctx.arc(centerX, centerY, radius, angleFat * Math.PI, (angleFat + angleProtein) * Math.PI)
+            ctx.fill()
+            ctx.closePath()
+        }
+    </script>
+</body>
+</html>

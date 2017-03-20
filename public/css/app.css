@@ -1,0 +1,105 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.5px;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+main {
+    min-height: 100%;
+}
+
+#page {
+    padding: 20px 20px 40px 20px;
+    overflow: hidden;
+}
+
+header {
+    background: #4bc7d3;
+    padding: 5px 20px;
+}
+
+header h1 {
+    margin: 0 auto;
+    font-size: 1.8em;
+    max-width: 1000px;
+}
+
+footer {
+    height: 20px;
+    margin-top: -20px;
+    background: #aaa;
+}
+
+.resp-2 {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.resp-2 > *:nth-child(1),
+.resp-2 > *:nth-child(2) {
+    float: left;
+    width: 50%;
+}
+
+@media screen and (max-width: 767px) {
+    .resp-2 {
+        max-width: 500px;
+    }
+
+    .resp-2 > *:nth-child(1),
+    .resp-2 > *:nth-child(2) {
+        width: 100%;
+    }
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.b-color1 {
+    background-color: #588C7E;
+}
+
+.b-color2 {
+    background-color: #F2E394;
+}
+
+.b-color3 {
+    background-color: #F2AE72;
+}
+
+.b-color4 {
+    background-color: #D96459;
+}
+
+.b-color5 {
+    background-color: #8C4646;
+}
+
+.t-color-inv {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+button {
+    background: #588C7E;
+    background-image: linear-gradient(to bottom, #588C7E, #457264);
+    border-radius: 5px;
+    font-size: 14px;
+    text-decoration: none;
+    border: 0;
+    padding: 5px;
+    color: #fff;
+}
+
+button:hover {
+    background: #6ca89a;
+    background-image: linear-gradient(to bottom, #6ca89a, #588C7E);
+    text-decoration: none;
+}

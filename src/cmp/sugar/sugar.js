@@ -15,7 +15,7 @@ function Sugar(container, onType) {
 
     this.container.innerHTML = `
         <div class="cmp sugar">
-            <input type="text" />
+            <input type="text" placeholder="Start typing a food name..." />
             <div class="dropdown"></div>
         </div>`
 
@@ -215,7 +215,7 @@ Sugar.prototype.render = function() {
     const templateString = `
         {{#if loading}}
             <div>loading...</div>
-        {{else}}
+        {{else if suggestions.length}}
             <ul>
             {{#each suggestions}}
                 <li{{{selected @index}}}>{{text}}</li>

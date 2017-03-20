@@ -1,0 +1,9 @@
+body {
+    background: #9fd8dc;
+}
+
+.cont-example {
+    background: #fff;
+    max-width: 500px;
+    margin: 20px auto 0 auto;
+}

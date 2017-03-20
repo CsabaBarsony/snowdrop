@@ -1,3 +1,25 @@
-.cmp.sugar li.selected {
+.sugar {
+    margin: 0 auto;
+    width: 300px;
+    font-size: 1.1em;
+}
+
+.sugar .selected {
     font-weight: bold;
+    background: #ddd;
+}
+
+.sugar ul,
+.sugar .dropdown > div{
+    position: absolute;
+    background: #fff;
+    padding: 10px;
+    width: 281px;
+    border: 1px solid #aaa;
+}
+
+.sugar input {
+    font-size: 20px;
+    font-family: inherit;
+    width: 300px;
 }

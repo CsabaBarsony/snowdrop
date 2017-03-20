@@ -1,0 +1,22 @@
+.pie {
+    margin: 0 auto;
+    width: 200px;
+}
+
+.pie canvas {
+    margin-bottom: 20px;
+}
+
+.pie table {
+    width: 100%;
+}
+
+.pie .nutrient_marker {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+}
+
+.pie td:nth-child(3) {
+    text-align: right;
+}
