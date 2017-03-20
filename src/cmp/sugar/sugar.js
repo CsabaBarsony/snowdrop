@@ -19,10 +19,12 @@ function Sugar(container, onType) {
             <div class="dropdown"></div>
         </div>`
 
-    this.container.querySelector('input').addEventListener('focus', this.focus.bind(this))
-    this.container.querySelector('input').addEventListener('blur', this.blur.bind(this))
-    this.container.querySelector('input').addEventListener('input', this.input.bind(this))
-    this.container.querySelector('input').addEventListener('keydown', this.keydown.bind(this))
+    const input = this.container.querySelector('input')
+
+    input.addEventListener('focus', this.focus.bind(this))
+    input.addEventListener('blur', this.blur.bind(this))
+    input.addEventListener('input', this.input.bind(this))
+    input.addEventListener('keydown', this.keydown.bind(this))
 
     const actions = {
         blur: {

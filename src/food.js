@@ -1,6 +1,6 @@
 /**
  * @param {NutrientType} type
- * @param {Number} amount
+ * @param {Number}       amount
  * @constructor
  */
 function Nutrient(type, amount) {
@@ -45,7 +45,7 @@ function Food(id, name, macros, nutrients = [], description = '', portion = null
  * @param {Number} [grams]
  * @constructor
  */
-function Ingredient(food, amount, unit, grams) {
+function Ingredient(food, amount, unit, grams = 0) {
     this.food   = food
     this.amount = amount
     this.unit   = unit
@@ -53,8 +53,8 @@ function Ingredient(food, amount, unit, grams) {
 }
 
 /**
- * @param {String} title
- * @param {MealType} mealType
+ * @param {String}       title
+ * @param {MealType}     mealType
  * @param {Ingredient[]} ingredients
  * @constructor
  */
@@ -115,15 +115,15 @@ const Unit = {
 }
 
 const food = {
-    Nutrient: Nutrient,
-    Macros: Macros,
-    Food: Food,
-    Ingredient: Ingredient,
-    Meal: Meal,
-    Portion: Portion,
+    Nutrient:     Nutrient,
+    Macros:       Macros,
+    Food:         Food,
+    Ingredient:   Ingredient,
+    Meal:         Meal,
+    Portion:      Portion,
     NutrientType: NutrientType,
-    MealType: MealType,
-    Unit: Unit
+    MealType:     MealType,
+    Unit:         Unit
 }
 
 module.exports = food

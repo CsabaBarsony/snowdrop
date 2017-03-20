@@ -24,7 +24,7 @@ const macrosResult = new Macros(
 
 const ingredients = [
     new Ingredient(new Food('1', 'avocado', macros), 100, Unit.G),
-    new Ingredient(new Food('1', 'broccoli', macros), 100, Unit.G)
+    new Ingredient(new Food('2', 'broccoli', macros), 100, Unit.G)
 ]
 
 describe('Pie', () => {
