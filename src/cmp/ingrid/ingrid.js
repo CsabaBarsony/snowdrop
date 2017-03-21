@@ -90,7 +90,15 @@ Ingrid.prototype.render = function() {
     })
 
     this.container.querySelectorAll('.remove').forEach(b => {
-        b.addEventListener('click', this.remove.bind(this, parseInt(b.parentNode.parentNode.dataset.index)))
+        b.addEventListener('click', () => {
+            const index = b.parentNode.parentNode.dataset.index
+
+            this.model.ingredients.splice(index, 1)
+            this.render()
+            PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
+        })
+
+        // b.addEventListener('click', this.remove.bind(this, parseInt(b.parentNode.parentNode.dataset.index)))
     })
 }
 
@@ -110,10 +118,10 @@ Ingrid.prototype.cancel = function(index) {
     this.render()
 }
 
-Ingrid.prototype.remove = function(index) {
+/*Ingrid.prototype.remove = function(index) {
     this.model.ingredients.splice(index, 1)
     this.render()
     PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
-}
+}*/
 
 module.exports = Ingrid
