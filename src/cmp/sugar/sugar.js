@@ -15,7 +15,7 @@ function Sugar(container, onType) {
 
     this.container.innerHTML = `
         <div class="cmp sugar">
-            <input type="text" placeholder="Start typing a food name..." />
+            <input type="text" placeholder="Start typing a food name..." autofocus />
             <div class="dropdown"></div>
         </div>`
 
@@ -25,6 +25,10 @@ function Sugar(container, onType) {
     input.addEventListener('blur', this.blur.bind(this))
     input.addEventListener('input', this.input.bind(this))
     input.addEventListener('keydown', this.keydown.bind(this))
+
+    PubSub.subscribe(events.INGREDIENTS_CHANGE, () => {
+        input.focus()
+    })
 
     const actions = {
         blur: {
