@@ -74,54 +74,34 @@ Ingrid.prototype.render = function() {
     const template = Handlebars.compile(templateString)
     this.container.innerHTML = template(this.model)
 
-    this.container.querySelectorAll('.save').forEach(b => {
-        const item = b.parentNode.parentNode
+    this.container.querySelectorAll('.save').forEach(saveButton => {
+        saveButton.addEventListener('click', () => {
+            const index = parseInt(saveButton.parentNode.parentNode.dataset.index)
+            const ingredient = this.model.ingredients[index]
+            const item = this.container.querySelector('[data-index="' + index + '"]')
 
-        b.addEventListener('click', this.save.bind(
-            this,
-            parseInt(item.dataset.index),
-            parseInt(item.children[1].children[0].value),
-            item.children[2].children[0].value
-        ))
-    })
-
-    this.container.querySelectorAll('.cancel').forEach(b => {
-        b.addEventListener('click', this.cancel.bind(this, parseInt(b.parentNode.parentNode.dataset.index)))
-    })
-
-    this.container.querySelectorAll('.remove').forEach(b => {
-        b.addEventListener('click', () => {
-            const index = b.parentNode.parentNode.dataset.index
-
-            this.model.ingredients.splice(index, 1)
+            ingredient.amount = parseInt(item.querySelector('input').value)
+            ingredient.unit = item.querySelector('select').value
+            this.model.editingIngredientIndex = -1
             this.render()
             PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
         })
+    })
 
-        // b.addEventListener('click', this.remove.bind(this, parseInt(b.parentNode.parentNode.dataset.index)))
+    this.container.querySelectorAll('.cancel').forEach(cancelButton => {
+        cancelButton.addEventListener('click', () => {
+            this.model.ingredients.splice(parseInt(cancelButton.parentNode.parentNode.dataset.index), 1)
+            this.render()
+        })
+    })
+
+    this.container.querySelectorAll('.remove').forEach(removeButton => {
+        removeButton.addEventListener('click', () => {
+            this.model.ingredients.splice(removeButton.parentNode.parentNode.dataset.index, 1)
+            this.render()
+            PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
+        })
     })
 }
-
-Ingrid.prototype.save = function(index) {
-    const ingredient = this.model.ingredients[index]
-    const item = this.container.querySelector('[data-index="' + index + '"]')
-
-    ingredient.amount = parseInt(item.querySelector('input').value)
-    ingredient.unit = item.querySelector('select').value
-    this.model.editingIngredientIndex = -1
-    this.render()
-    PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
-}
-
-Ingrid.prototype.cancel = function(index) {
-    this.model.ingredients.splice(index, 1)
-    this.render()
-}
-
-/*Ingrid.prototype.remove = function(index) {
-    this.model.ingredients.splice(index, 1)
-    this.render()
-    PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
-}*/
 
 module.exports = Ingrid
