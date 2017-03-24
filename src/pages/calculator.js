@@ -5,13 +5,10 @@ const Suggestion = require('../cmp/sugar/suggestion.js')
 const store = require('../store.js')
 const PubSub = require('pubsub-js')
 const events = require('../events.js')
+const bella = require('../bella.js')
 
 new Sugar(document.getElementById('cont-sugar'), (text, callback) => {
-    store.getFoods(text, foods => {
-        callback(foods.map(food => {
-            return new Suggestion(food.name, food)
-        }))
-    })
+    store.getFoodSuggestions(text, callback)
 })
 
 new Ingrid(document.getElementById('cont-ingrid'))
