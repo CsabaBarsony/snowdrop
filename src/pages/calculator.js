@@ -8,7 +8,7 @@ const events = require('../events.js')
 const bella = require('../bella.js')
 
 new Sugar(document.getElementById('cont-sugar'), (text, callback) => {
-    store.getFoodSuggestions(text, callback)
+    store.getSuggestions(text, callback)
 })
 
 new Ingrid(document.getElementById('cont-ingrid'))

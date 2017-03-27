@@ -1,3 +1,4 @@
+const app = require('../../app.js')
 const Statechart = require('scion-core').Statechart
 const Handlebars = require('handlebars')
 const PubSub = require('pubsub-js')
@@ -9,6 +10,7 @@ function Sugar(container, onType) {
     this.container = container
     this.model = {
         loading: false,
+        disabled: false,
         selectedIndex: -1,
         suggestions: []
     }
@@ -30,9 +32,14 @@ function Sugar(container, onType) {
         input.focus()
     })
 
+    PubSub.subscribe('FOOD_REQUEST_SUCCESS', () => {
+        sc.gen('reset')
+    })
+
     const actions = {
         blur: {
             entry: () => {
+                this.model.disabled = false
                 this.model.selectedIndex = -1
                 this.model.suggestions = []
                 this.render()
@@ -91,8 +98,9 @@ function Sugar(container, onType) {
         },
         chosen: {
             entry: () => {
-                PubSub.publish(events.FOOD_SELECT, this.model.suggestions[this.model.selectedIndex].data)
+                PubSub.publish(events.SUGGESTION_SELECT, this.model.suggestions[this.model.selectedIndex].data)
                 container.querySelector('input').value = ''
+                this.model.disabled = true
                 this.model.suggestions = []
                 this.render()
             }
@@ -107,6 +115,16 @@ function Sugar(container, onType) {
                 {
                     event: 'select',
                     target: 'focus'
+                }
+            ]
+        },
+        {
+            id: 'chosen',
+            onEntry: actions.chosen.entry,
+            transitions: [
+                {
+                    event: 'reset',
+                    target: 'blur'
                 }
             ]
         },
@@ -196,22 +214,12 @@ function Sugar(container, onType) {
                             ]
                         }
                     ]
-                },
-                {
-                    id: 'chosen',
-                    onEntry: actions.chosen.entry,
-                    transitions: [
-                        {
-                            event: 'type',
-                            target: 'loading'
-                        }
-                    ]
                 }
             ]
         }
     ]
 
-    sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
+    sc = new Statechart({ states: states }, { logStatesEnteredAndExited: app.logStatechart })
     sc.start()
 
     this.render()
@@ -228,6 +236,8 @@ Sugar.prototype.render = function() {
             {{/each}}
             </ul>
         {{/if}}`
+
+    this.container.querySelector('input').disabled = this.model.disabled
 
     Handlebars.registerHelper('selected', index => {
         return index === this.model.selectedIndex ? ' class="selected"' : ''

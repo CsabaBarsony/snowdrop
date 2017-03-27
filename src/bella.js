@@ -1,3 +1,5 @@
+const app = require('./app.js')
+
 const bella = {
     prop: function(value) {
         function gettersetter(value) {
@@ -68,16 +70,18 @@ const bella = {
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        const response = xhr.response ? JSON.parse(xhr.response) : null
-                        callback(true, response)
-                    }
-                    else if (xhr.status === 404) {
-                        callback(false, xhr.status)
-                    }
-                    else {
-                        console.error('ajax get error')
-                    }
+                    setTimeout(() => {
+                        if (xhr.status === 200) {
+                            const response = xhr.response ? JSON.parse(xhr.response) : null
+                            callback(true, response)
+                        }
+                        else if (xhr.status === 404) {
+                            callback(false, xhr.status)
+                        }
+                        else {
+                            console.error('ajax get error')
+                        }
+                    }, app.ajaxDelay)
                 }
             }
             xhr.open('GET', url)
@@ -88,16 +92,18 @@ const bella = {
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        const response = xhr.response ? JSON.parse(xhr.response) : null
-                        callback(true, response)
-                    }
-                    else if(xhr.status === 404) {
-                        callback(false, xhr.status)
-                    }
-                    else {
-                        console.error('ajax post error')
-                    }
+                    setTimeout(() => {
+                        if (xhr.status === 200) {
+                            const response = xhr.response ? JSON.parse(xhr.response) : null
+                            callback(true, response)
+                        }
+                        else if(xhr.status === 404) {
+                            callback(false, xhr.status)
+                        }
+                        else {
+                            console.error('ajax post error')
+                        }
+                    }, app.ajaxDelay)
                 }
             }
             xhr.open('POST', url)

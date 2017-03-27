@@ -2,73 +2,105 @@ const Handlebars = require('handlebars')
 const PubSub = require('pubsub-js')
 const events = require('../../events.js')
 const Ingredient = require('../../food.js').Ingredient
-const Unit = require('../../food.js').Unit
+const Serving = require('../../food.js').Serving
+const store = require('../../store.js')
 
 function Ingrid(container) {
     this.container = container
     this.model = {
+        loading: false,
         editingIngredientIndex: -1,
-        ingredients: [],
-        units: Object.keys(Unit).map(key => { return Unit[key] })
+        ingredients: []
     }
 
-    PubSub.subscribe(events.FOOD_SELECT, (eventName, food) => {
-        this.model.ingredients.push(new Ingredient(food, 100, Unit.G, 0))
-        this.model.editingIngredientIndex = this.model.ingredients.length - 1
+    PubSub.subscribe(events.SUGGESTION_SELECT, (eventName, data) => {
+        this.model.loading = true
         this.render()
-        const index = this.model.editingIngredientIndex
-        if(index > -1){
-            const input = this.container.querySelector('[data-index="' + index + '"] input')
-            input.focus()
-            input.select()
-        }
+
+        store.getFood(data.id, food => {
+            PubSub.publish('FOOD_REQUEST_SUCCESS')
+            this.model.ingredients.push(new Ingredient(food, 1, new Serving('g', 1, 1)))
+            this.model.editingIngredientIndex = this.model.ingredients.length - 1
+            this.model.loading = false
+            this.render()
+            const index = this.model.editingIngredientIndex
+            if(index > -1){
+                const input = this.container.querySelector('[data-index="' + index + '"] input')
+                input.focus()
+                input.select()
+            }
+        })
     })
 }
 
 Ingrid.prototype.render = function() {
-    const templateString = `
+    const editingRow = `
+        <tr data-index="{{@index}}">
+            <td class="food_name">
+                <span>{{food.name}}</span>
+            </td>
+            <td class="amount">
+                <input type="text" value="{{amount}}" />
+            </td>
+            <td>
+                <select>
+                {{#each food.servings}}
+                    <option value="{{@index}}">{{displayServing this}}</option>
+                {{/each}}    
+                </select>
+            </td>
+            <td class="buttons">
+                <button class="save" data-index="{{@index}}">save</button>
+                <button class="cancel">cancel</button>
+            </td>
+        </tr>`
+
+    const row = `
+        <tr data-index="{{@index}}">
+            <td class="food_name">
+                <span>{{food.name}}</span>
+            </td>
+            <td></td>
+            <td class="amount">
+                <span>{{displayAmount amount serving}}</span>
+            </td>
+            <td>
+                <button class="remove">remove</button>                
+            </td>
+        </tr>`
+
+    const table = `
         <table class="cmp ingrid">
         {{#each ingredients}}
-            <tr data-index="{{@index}}">
             {{#if (editing @index)}}
-                <td class="food_name">
-                    <span>{{food.name}}</span>
-                </td>
-                <td class="amount">
-                    <input type="text" value="{{amount}}" />
-                </td>
-                <td>
-                    <select>
-                    {{#each ../units}}
-                        <option value="{{this}}">{{this}}</option>
-                    {{/each}}    
-                    </select>
-                </td>
-                <td>
-                    <button class="save" data-index="{{@index}}">save</button>
-                </td>
-                <td>
-                    <button class="cancel">cancel</button>
-                </td>
+                ${editingRow}
             {{else}}
-                <td class="food_name">
-                    <span>{{food.name}}</span>
-                </td>
-                <td></td>
-                <td></td>
-                <td class="amount">
-                    <span>{{amount}}{{unit}}</span>
-                </td>
-                <td>
-                    <button class="remove">remove</button>                
-                </td>
+                ${row}
             {{/if}}
-            </tr>
         {{/each}}
         </table>`
 
+    const templateString = `
+        {{#if loading}}
+            <div>loading...</div>
+        {{else}}
+            ${table}
+        {{/if}}
+    `
+
     Handlebars.registerHelper('editing', index => {
         return index === this.model.editingIngredientIndex
+    })
+
+    Handlebars.registerHelper('displayAmount', (amount, serving) => {
+        return amount + ' ' +
+            (serving.amount !== 1 ? serving.amount : '') +
+            serving.name +
+            (serving.name !== 'g' ? ' (' + (serving.gram * amount) + 'g)' : '')
+    })
+
+    Handlebars.registerHelper('displayServing', serving => {
+        return (serving.amount !== 1 ? serving.amount : '') + serving.name
     })
 
     const template = Handlebars.compile(templateString)
@@ -81,7 +113,7 @@ Ingrid.prototype.render = function() {
             const item = this.container.querySelector('[data-index="' + index + '"]')
 
             ingredient.amount = parseInt(item.querySelector('input').value)
-            ingredient.unit = item.querySelector('select').value
+            ingredient.serving = ingredient.food.servings[parseInt(item.querySelector('select').value)]
             this.model.editingIngredientIndex = -1
             this.render()
             PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)

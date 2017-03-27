@@ -1,20 +1,10 @@
 /**
- * @param {NutrientType} type
- * @param {Number}       amount
+ * @param {Number} ch
+ * @param {Number} fat
+ * @param {Number} protein
  * @constructor
  */
-function Nutrient(type, amount) {
-    this.type   = type
-    this.amount = amount
-}
-
-/**
- * @param {Nutrient} ch
- * @param {Nutrient} fat
- * @param {Nutrient} protein
- * @constructor
- */
-function Macros(ch, fat, protein) {
+function Nutrients(ch, fat, protein) {
     this.ch      = ch
     this.fat     = fat
     this.protein = protein
@@ -23,107 +13,48 @@ function Macros(ch, fat, protein) {
 /**
  * @param {String}     id
  * @param {String}     name
- * @param {Macros}     macros
- * @param {Nutrient[]} [nutrients]
- * @param {String}     [description]
- * @param {Portion}    [portion]
+ * @param {String}     description
+ * @param {Nutrients}  nutrients
+ * @param {Serving[]}  servings
  * @constructor
  */
-function Food(id, name, macros, nutrients = [], description = '', portion = null) {
+function Food(id, name, description, nutrients, servings) {
     this.id          = id
     this.name        = name
-    this.macros      = macros
-    this.nutrients   = nutrients
     this.description = description
-    this.portion     = portion
+    this.nutrients   = nutrients
+    this.servings    = servings
 }
 
 /**
- * @param {Food}   food
- * @param {Number} amount - Amount of units.
- * @param {Unit}   unit
- * @param {Number} [grams]
+ * @param {Food}    food
+ * @param {Number}  amount
+ * @param {Serving} serving
  * @constructor
  */
-function Ingredient(food, amount, unit, grams = 0) {
-    this.food   = food
-    this.amount = amount
-    this.unit   = unit
-    this.grams  = grams
-}
-
-/**
- * @param {String}       title
- * @param {MealType}     mealType
- * @param {Ingredient[]} ingredients
- * @constructor
- */
-function Meal(title, mealType, ingredients) {
-    this.title       = title
-    this.mealType    = mealType
-    this.ingredients = ingredients
+function Ingredient(food, amount, serving) {
+    this.food    = food
+    this.amount  = amount
+    this.serving = serving
 }
 
 /**
  * @param {String} name
  * @param {Number} amount
- * @param {Number} grams
+ * @param {Number} gram
  * @constructor
  */
-function Portion(name, amount, grams) {
+function Serving(name, amount, gram) {
     this.name   = name
     this.amount = amount
-    this.grams  = grams
-}
-
-/**
- * @enum
- */
-const NutrientType = {
-    PROTEIN:      'protein',
-    FAT:          'fat',
-    CARBOHYDRATE: 'carbohydrate',
-    ENERGY:       'energy',
-    STARCH:       'starch',
-    GLUCOSE:      'glucose',
-    FRUCTOSE:     'fructose',
-    WATER:        'water',
-    ALCOHOL:      'alcohol',
-    SUGAR:        'sugar'
-}
-
-/**
- * @enum
- */
-const MealType = {
-    BREAKFAST: 'breakfast',
-    LUNCH:     'lunch',
-    DINNER:    'dinner',
-    SNACK:     'snack'
-}
-
-/**
- * @enum
- */
-const Unit = {
-    G:    'g',
-    FL:   'fl',
-    OZ:   'oz',
-    TSP:  'tsp',
-    TBSP: 'tbsp',
-    CUP:  'cup'
+    this.gram   = gram
 }
 
 const food = {
-    Nutrient:     Nutrient,
-    Macros:       Macros,
-    Food:         Food,
-    Ingredient:   Ingredient,
-    Meal:         Meal,
-    Portion:      Portion,
-    NutrientType: NutrientType,
-    MealType:     MealType,
-    Unit:         Unit
+    Nutrients:  Nutrients,
+    Food:       Food,
+    Ingredient: Ingredient,
+    Serving:    Serving
 }
 
 module.exports = food

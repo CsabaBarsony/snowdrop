@@ -5,29 +5,21 @@ const PubSub = require('pubsub-js')
 const events = require('../../events.js')
 const Ingredient = require('../../food.js').Ingredient
 const Food = require('../../food.js').Food
-const Macros = require('../../food.js').Macros
-const Nutrient = require('../../food.js').Nutrient
-const NutrientType = require('../../food.js').NutrientType
-const Unit = require('../../food.js').Unit
+const Nutrients = require('../../food.js').Nutrients
+const Serving = require('../../food.js').Serving
+const Macros = require('./macros.js')
 
-const macros = new Macros(
-    new Nutrient(NutrientType.CARBOHYDRATE, 10),
-    new Nutrient(NutrientType.FAT, 20),
-    new Nutrient(NutrientType.PROTEIN, 10)
-)
-
-const macrosResult = new Macros(
-    new Nutrient(NutrientType.CARBOHYDRATE, 25),
-    new Nutrient(NutrientType.FAT, 50),
-    new Nutrient(NutrientType.PROTEIN, 25)
-)
+const avocado = new Food('1', 'avocado', '', new Nutrients(10, 20, 10), [])
+const broccoli = new Food('2', 'broccoli', '', new Nutrients(10, 20, 10), [])
+const cheese = new Food('3', 'cheese', '', new Nutrients(10, 20, 10), [])
 
 const ingredients = [
-    new Ingredient(new Food('1', 'avocado', macros), 100, Unit.G),
-    new Ingredient(new Food('2', 'broccoli', macros), 100, Unit.G)
+    new Ingredient(avocado, 10, new Serving('g', 1, 1)),
+    new Ingredient(broccoli, 10, new Serving('g', 1, 1)),
+    new Ingredient(cheese, 10, new Serving('g', 1, 1))
 ]
 
-describe('Pie', () => {
+xdescribe('Pie', () => {
     let pie
 
     beforeEach(done => {
@@ -44,6 +36,6 @@ describe('Pie', () => {
 
 describe('Pie', () => {
     it('calculateMacros should calculate macros', () => {
-        expect(Pie.calculateMacros(ingredients)).toEqual(macrosResult)
+        expect(Pie.calculateMacros(ingredients)).toEqual(new Macros(25, 50, 25))
     })
 })

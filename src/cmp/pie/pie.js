@@ -1,9 +1,7 @@
 const Handlebars = require('handlebars')
 const PubSub = require('pubsub-js')
 const events = require('../../events.js')
-const Macros = require('../../food.js').Macros
-const Nutrient = require('../../food.js').Nutrient
-const NutrientType = require('../../food.js').NutrientType
+const Macros = require('./macros.js')
 
 function Pie(container) {
     this.container = container
@@ -34,21 +32,21 @@ Pie.prototype.render = function() {
                         <div class="nutrient_marker b-color1"></div>
                     </td>
                     <td>carbohydrate: </td>
-                    <td>{{macros.ch.amount}}%</td>
+                    <td>{{macros.ch}}%</td>
                 </tr>
                 <tr>
                     <td>
                         <div class="nutrient_marker b-color2"></div>
                     </td>
                     <td>fat: </td>
-                    <td>{{macros.fat.amount}}%</td>
+                    <td>{{macros.fat}}%</td>
                 </tr>
                 <tr>
                     <td>
                         <div class="nutrient_marker b-color4"></div>
                     </td>
                     <td>protein: </td>
-                    <td>{{macros.protein.amount}}%</td>
+                    <td>{{macros.protein}}%</td>
                 </tr>
             </table>
         </div>
@@ -67,8 +65,8 @@ Pie.prototype.drawPie = function() {
         var angleZeroX = 200
         var angleZeroY = 100
         var radius = 100
-        var angleFat = this.model.macros.fat.amount / 50
-        var angleProtein = this.model.macros.protein.amount / 50
+        var angleFat = this.model.macros.fat / 50
+        var angleProtein = this.model.macros.protein / 50
 
         ctx.beginPath()
         ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false)
@@ -94,20 +92,14 @@ Pie.prototype.drawPie = function() {
 }
 
 Pie.calculateMacros = function(ingredients) {
-    function convertToGram(ingredient) {
-        // TODO
-        return ingredient
-    }
-
     let sumCh = 0
     let sumFat = 0
     let sumProtein = 0
 
     ingredients.forEach((ingredient) => {
-        ingredient = convertToGram(ingredient)
-        sumCh += ingredient.food.macros.ch.amount * ingredient.amount
-        sumFat += ingredient.food.macros.fat.amount * ingredient.amount
-        sumProtein += ingredient.food.macros.protein.amount * ingredient.amount
+        sumCh += ingredient.amount * ingredient.serving.gram * ingredient.food.nutrients.ch
+        sumFat += ingredient.amount * ingredient.serving.gram * ingredient.food.nutrients.fat
+        sumProtein += ingredient.amount * ingredient.serving.gram * ingredient.food.nutrients.protein
     })
 
     const sumMacros = sumCh + sumFat + sumProtein
@@ -116,11 +108,7 @@ Pie.calculateMacros = function(ingredients) {
     const fat = Math.round(sumFat / sumMacros * 100)
     const protein = Math.round(sumProtein / sumMacros * 100)
 
-    return new Macros(
-        new Nutrient(NutrientType.CARBOHYDRATE, ch),
-        new Nutrient(NutrientType.FAT, fat),
-        new Nutrient(NutrientType.PROTEIN, protein)
-    )
+    return new Macros(ch, fat, protein)
 }
 
 module.exports = Pie
