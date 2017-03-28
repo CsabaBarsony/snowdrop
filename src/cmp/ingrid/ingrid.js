@@ -36,20 +36,18 @@ function Ingrid(container) {
 Ingrid.prototype.render = function() {
     const editingRow = `
         <tr data-index="{{@index}}">
-            <td class="food_name">
+            <td>
                 <span>{{food.name}}</span>
             </td>
-            <td class="amount">
-                <input type="text" value="{{amount}}" />
-            </td>
             <td>
+                <input type="number" value="{{amount}}" />
                 <select>
                 {{#each food.servings}}
                     <option value="{{@index}}">{{displayServing this}}</option>
                 {{/each}}    
                 </select>
             </td>
-            <td class="buttons">
+            <td class="editing">
                 <button class="save" data-index="{{@index}}">save</button>
                 <button class="cancel">cancel</button>
             </td>
@@ -57,11 +55,10 @@ Ingrid.prototype.render = function() {
 
     const row = `
         <tr data-index="{{@index}}">
-            <td class="food_name">
+            <td>
                 <span>{{food.name}}</span>
             </td>
-            <td></td>
-            <td class="amount">
+            <td>
                 <span>{{displayAmount amount serving}}</span>
             </td>
             <td>

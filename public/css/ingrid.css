@@ -1,20 +1,31 @@
 .ingrid {
     border-collapse: collapse;
-}
-
-.ingrid .food_name {
-    width: 100%;
-}
-
-.ingrid .amount {
-    white-space: nowrap;
-    text-align: right;
+    width: 100%
 }
 
 .ingrid tr {
     border-bottom: 1px solid #e4e4e4;
 }
 
+.ingrid td:nth-child(2) {
+    min-width: 200px;
+    text-align: right;
+}
+
+.ingrid .editing {
+    min-width: 100px;
+}
+
 .ingrid td {
     padding: 10px 3px 10px;
 }
+
+.ingrid input {
+    width: 80px;
+}
+
+.ingrid select {
+    width: 100px;
+}
+
+
