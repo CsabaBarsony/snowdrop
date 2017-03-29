@@ -1,11 +1,5 @@
-/**
- * @param {String} text
- * @param {Object} [data]
- * @constructor
- */
-function Suggestion(text, data = {}) {
-    this.text = text
-    this.data = data
-}
+const Food = require('../../food.js').Food
+
+
 
 module.exports = Suggestion

@@ -3,10 +3,11 @@ const Statechart = require('scion-core').Statechart
 const Handlebars = require('handlebars')
 const PubSub = require('pubsub-js')
 const events = require('../../events.js')
+const store = require('../../store.js')
 
 let sc
 
-function Sugar(container, onType) {
+function Sugar(container) {
     this.container = container
     this.model = {
         loading: false,
@@ -54,7 +55,7 @@ function Sugar(container, onType) {
         },
         loading: {
             entry: e => {
-                onType(e.data, suggestions => {
+                store.getSuggestions(e.data, suggestions => {
                     sc.gen('load', suggestions)
                 })
 
@@ -98,7 +99,7 @@ function Sugar(container, onType) {
         },
         chosen: {
             entry: () => {
-                PubSub.publish(events.SUGGESTION_SELECT, this.model.suggestions[this.model.selectedIndex].data)
+                PubSub.publish(events.SUGGESTION_SELECT, this.model.suggestions[this.model.selectedIndex].food)
                 container.querySelector('input').value = ''
                 this.model.disabled = true
                 this.model.suggestions = []

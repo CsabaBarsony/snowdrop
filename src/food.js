@@ -50,11 +50,22 @@ function Serving(name, amount, gram) {
     this.gram   = gram
 }
 
+/**
+ * @param {String} text
+ * @param {Food} food
+ * @constructor
+ */
+function Suggestion(text, food) {
+    this.text = text
+    this.food = food
+}
+
 const food = {
     Nutrients:  Nutrients,
     Food:       Food,
     Ingredient: Ingredient,
-    Serving:    Serving
+    Serving:    Serving,
+    Suggestion: Suggestion
 }
 
 module.exports = food

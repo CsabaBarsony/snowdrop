@@ -11,7 +11,12 @@ const nutrientDB = mysql.createConnection({
 
 module.exports = {
     getSuggestions: (text, callback) => {
-        nutrientDB.query('select * from `enabled_food` where enabled_food.name like ?', [text + '%'], (error, rows) => {
+        nutrientDB.query(
+            `SELECT *
+            FROM enabled_food
+            WHERE enabled_food.name
+            LIKE ?`,
+            [text + '%'], (error, rows) => {
             if(!error) {
                 callback(true, rows.map(row => {
                     return row

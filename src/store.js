@@ -1,4 +1,5 @@
 const Food = require('./food.js').Food
+const Suggestion = require('./food.js').Suggestion
 const Nutrients = require('./food.js').Nutrients
 const Serving = require('./food.js').Serving
 const bella = require('./bella.js')
@@ -7,11 +8,16 @@ const store = {
     getSuggestions: function(text, callback) {
         bella.ajax.get('/getSuggestions/' + text, (success, suggestions) => {
             if(success){
-                callback(suggestions.map(suggestion => {
-                    return {
-                        text: suggestion.name,
-                        data: suggestion
-                    }
+                callback(suggestions.map(data => {
+                    const food = new Food(
+                        data.id,
+                        data.name,
+                        data.description,
+                        data.nutrients,
+                        data.servings
+                    )
+
+                    return new Suggestion(data.name, food)
                 }))
             }
             else console.error('Store ajax error')
