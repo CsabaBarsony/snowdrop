@@ -7,7 +7,7 @@ const store = require('../../store.js')
 
 let sc
 
-function Sugar(container) {
+function Sugar(container, publish) {
     this.container = container
     this.model = {
         loading: false,
@@ -99,7 +99,8 @@ function Sugar(container) {
         },
         chosen: {
             entry: () => {
-                PubSub.publish(events.SUGGESTION_SELECT, this.model.suggestions[this.model.selectedIndex].food)
+                publish({ name: events.SUGGESTION_SELECT, data: this.model.suggestions[this.model.selectedIndex].food })
+                //PubSub.publish(events.SUGGESTION_SELECT, this.model.suggestions[this.model.selectedIndex].food)
                 container.querySelector('input').value = ''
                 this.model.disabled = true
                 this.model.suggestions = []
