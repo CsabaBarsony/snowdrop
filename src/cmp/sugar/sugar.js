@@ -55,6 +55,7 @@ function Sugar(container, publish) {
         },
         loading: {
             entry: e => {
+                publish({ name: 'select' })
                 store.getSuggestions(e.data, suggestions => {
                     sc.gen('load', suggestions)
                 })

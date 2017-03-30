@@ -133,4 +133,23 @@ Ingrid.prototype.render = function() {
     })
 }
 
+Ingrid.prototype.addIngredient = function(ingredient) {
+    this.model.loading = true
+    this.render()
+
+    store.getFood(ingredient.food.id, food => {
+        PubSub.publish('FOOD_REQUEST_SUCCESS')
+        this.model.ingredients.push(new Ingredient(food, 1, new Serving('g', 1, 1)))
+        this.model.editingIngredientIndex = this.model.ingredients.length - 1
+        this.model.loading = false
+        this.render()
+        const index = this.model.editingIngredientIndex
+        if(index > -1){
+            const input = this.container.querySelector('[data-index="' + index + '"] input')
+            input.focus()
+            input.select()
+        }
+    })
+}
+
 module.exports = Ingrid

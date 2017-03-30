@@ -30,10 +30,17 @@ const states = [
     },
     {
         id: 'filled',
+        onEntry: event => {
+            ingrid.addIngredient(event.data)
+        },
         transitions: [
             {
                 event: 'clear',
                 target: 'empty'
+            },
+            {
+                event: 'select',
+                target: 'loading'
             }
         ]
     }
@@ -43,7 +50,7 @@ const sc = new Statechart({ states: states }, { logStatesEnteredAndExited: true 
 sc.start()
 
 const sugar = new Sugar(document.getElementById('cont-sugar'), event => {
-    sc.gen('select', event.data)
+    sc.gen(event.name, event.data)
 })
 
 const ingrid = new Ingrid(document.getElementById('cont-ingrid'))
