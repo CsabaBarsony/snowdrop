@@ -55,7 +55,6 @@ function Sugar(container, publish) {
         },
         loading: {
             entry: e => {
-                publish({ name: 'select' })
                 store.getSuggestions(e.data, suggestions => {
                     sc.gen('load', suggestions)
                 })
@@ -100,7 +99,7 @@ function Sugar(container, publish) {
         },
         chosen: {
             entry: () => {
-                publish({ name: events.SUGGESTION_SELECT, data: this.model.suggestions[this.model.selectedIndex].food })
+                publish({ name: 'select', data: this.model.suggestions[this.model.selectedIndex].food })
                 //PubSub.publish(events.SUGGESTION_SELECT, this.model.suggestions[this.model.selectedIndex].food)
                 container.querySelector('input').value = ''
                 this.model.disabled = true

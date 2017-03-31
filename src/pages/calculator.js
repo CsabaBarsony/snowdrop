@@ -18,8 +18,7 @@ const states = [
     {
         id: 'loading',
         onEntry: event => {
-            // We are here, yee!
-            let x = 0
+            ingrid.addIngredient(event.data)
         },
         transitions: [
             {
@@ -31,7 +30,7 @@ const states = [
     {
         id: 'filled',
         onEntry: event => {
-            ingrid.addIngredient(event.data)
+
         },
         transitions: [
             {
