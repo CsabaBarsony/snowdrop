@@ -5,41 +5,70 @@ const Pie = require('../cmp/pie/pie.js')
 const events = require('../events.js')
 const Statechart = require('scion-core').Statechart
 
+const actions = {
+    input: {
+
+    },
+    loading: {
+        onEntry: event => {
+            ingrid.selectFood(event.data)
+        }
+    }
+}
+
 const states = [
     {
-        id: 'empty',
-        transitions: [
+        id: 'input',
+        onEntry: actions.input.onEntry,
+        states: [
             {
-                event: 'select',
-                target: 'loading'
+                id: 'empty',
+                transitions: [
+                    {
+                        event: 'select',
+                        target: 'loading'
+                    }
+                ]
+            },
+            {
+                id: 'filled',
+                transitions: [
+                    {
+                        event: 'clear',
+                        target: 'empty'
+                    },
+                    {
+                        event: 'select',
+                        target: 'loading'
+                    }
+                ]
             }
         ]
     },
     {
         id: 'loading',
-        onEntry: event => {
-            ingrid.addIngredient(event.data)
-        },
+        onEntry: actions.loading.onEntry,
         transitions: [
             {
                 event: 'load',
-                target: 'filled'
+                target: 'editing'
             }
         ]
     },
     {
-        id: 'filled',
-        onEntry: event => {
-
-        },
+        id: 'editing',
         transitions: [
+            {
+                event: 'save',
+                target: 'filled'
+            },
+            {
+                event: 'cancel',
+                target: 'filled'
+            },
             {
                 event: 'clear',
                 target: 'empty'
-            },
-            {
-                event: 'select',
-                target: 'loading'
             }
         ]
     }
@@ -52,6 +81,8 @@ const sugar = new Sugar(document.getElementById('cont-sugar'), event => {
     sc.gen(event.name, event.data)
 })
 
-const ingrid = new Ingrid(document.getElementById('cont-ingrid'))
+const ingrid = new Ingrid(document.getElementById('cont-ingrid'), event => {
+    sc.gen(event.name, event.data)
+})
 
 const pie = new Pie(document.getElementById('cont-pie'))

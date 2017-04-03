@@ -8,16 +8,12 @@ const store = {
     getSuggestions: function(text, callback) {
         bella.ajax.get('/getSuggestions/' + text, (success, suggestions) => {
             if(success){
-                callback(suggestions.map(data => {
-                    const food = new Food(
-                        data.id,
-                        data.name,
-                        data.description,
-                        data.nutrients,
-                        data.servings
+                callback(suggestions.map(suggestionData => {
+                    return new Suggestion(
+                        suggestionData.text,
+                        suggestionData.id,
+                        suggestionData.name
                     )
-
-                    return new Suggestion(data.name, food)
                 }))
             }
             else console.error('Store ajax error')
@@ -26,24 +22,9 @@ const store = {
     getFood: function(id, callback) {
         bella.ajax.get('/getFood/' + id, (success, foodData) => {
             if(success) {
-                const nutrients = {}
                 const servings = [
                     new Serving('g', 1, 1)
                 ]
-
-                foodData.nutrients.forEach(nutrient => {
-                    switch (nutrient.nutrient_definition_id) {
-                        case '203':
-                            nutrients.protein = nutrient.value
-                            break
-                        case '204':
-                            nutrients.fat = nutrient.value
-                            break
-                        case '205':
-                            nutrients.ch = nutrient.value
-                            break
-                    }
-                })
 
                 foodData.servings.forEach(serving => {
                     servings.push(new Serving(serving.name, serving.amount, serving.gram))
@@ -53,7 +34,14 @@ const store = {
                     foodData.id,
                     foodData.name,
                     foodData.description,
-                    new Nutrients(nutrients.ch, nutrients.fat, nutrients.protein),
+                    new Nutrients(
+                        foodData.nutrients.ch,
+                        foodData.nutrients.fat,
+                        foodData.nutrients.protein,
+                        foodData.nutrients.energy,
+                        foodData.nutrients.mg,
+                        foodData.nutrients.ca
+                    ),
                     servings
                 ))
             }

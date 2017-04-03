@@ -99,7 +99,7 @@ function Sugar(container, publish) {
         },
         chosen: {
             entry: () => {
-                publish({ name: 'select', data: this.model.suggestions[this.model.selectedIndex].food })
+                publish({ name: 'select', data: this.model.suggestions[this.model.selectedIndex].id })
                 //PubSub.publish(events.SUGGESTION_SELECT, this.model.suggestions[this.model.selectedIndex].food)
                 container.querySelector('input').value = ''
                 this.model.disabled = true
@@ -234,7 +234,7 @@ Sugar.prototype.render = function() {
         {{else if suggestions.length}}
             <ul>
             {{#each suggestions}}
-                <li{{{selected @index}}}>{{text}}</li>
+                <li{{{selected @index}}}>{{name}}</li>
             {{/each}}
             </ul>
         {{/if}}`

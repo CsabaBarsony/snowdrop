@@ -1,13 +1,31 @@
 /**
- * @param {Number} ch
- * @param {Number} fat
- * @param {Number} protein
+ * @param {String} name
+ * @param {Number} amount
+ * @param {String} unit
  * @constructor
  */
-function Nutrients(ch, fat, protein) {
+function Nutrient(name, amount, unit) {
+    this.name   = name
+    this.amount = amount
+    this.unit   = unit
+}
+
+/**
+ * @param {Nutrient} ch
+ * @param {Nutrient} fat
+ * @param {Nutrient} protein
+ * @param {Nutrient} energy
+ * @param {Nutrient} mg
+ * @param {Nutrient} ca
+ * @constructor
+ */
+function Nutrients(ch, fat, protein, energy, mg, ca) {
     this.ch      = ch
     this.fat     = fat
     this.protein = protein
+    this.energy  = energy
+    this.mg      = mg
+    this.ca      = ca
 }
 
 /**
@@ -52,12 +70,14 @@ function Serving(name, amount, gram) {
 
 /**
  * @param {String} text
- * @param {Food} food
+ * @param {String} id
+ * @param {String} name
  * @constructor
  */
-function Suggestion(text, food) {
+function Suggestion(text, id, name) {
     this.text = text
-    this.food = food
+    this.id   = id
+    this.name = name
 }
 
 const food = {
