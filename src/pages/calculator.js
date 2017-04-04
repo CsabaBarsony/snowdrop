@@ -7,11 +7,18 @@ const Statechart = require('scion-core').Statechart
 
 const actions = {
     input: {
-
+        onEntry: () => {
+            sugar.setAccess(true)
+        }
     },
     loading: {
         onEntry: event => {
             ingrid.selectFood(event.data)
+        }
+    },
+    filled: {
+        onEntry: event => {
+            pie.ingredientsChanged(event.data)
         }
     }
 }
@@ -20,26 +27,27 @@ const states = [
     {
         id: 'input',
         onEntry: actions.input.onEntry,
+        transitions: [
+            {
+                event: 'select',
+                target: 'loading'
+            }
+        ],
         states: [
             {
-                id: 'empty',
-                transitions: [
-                    {
-                        event: 'select',
-                        target: 'loading'
-                    }
-                ]
+                id: 'empty'
             },
             {
                 id: 'filled',
+                onEntry: actions.filled.onEntry,
                 transitions: [
                     {
                         event: 'clear',
                         target: 'empty'
                     },
                     {
-                        event: 'select',
-                        target: 'loading'
+                        event: 'ready',
+                        target: 'filled'
                     }
                 ]
             }
@@ -59,11 +67,7 @@ const states = [
         id: 'editing',
         transitions: [
             {
-                event: 'save',
-                target: 'filled'
-            },
-            {
-                event: 'cancel',
+                event: 'ready',
                 target: 'filled'
             },
             {

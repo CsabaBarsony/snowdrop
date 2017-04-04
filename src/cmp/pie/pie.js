@@ -9,16 +9,6 @@ function Pie(container) {
         display: false,
         macros: null
     }
-
-    PubSub.subscribe(events.INGREDIENTS_CHANGE, (e, ingredients) => {
-        this.model = {
-            display: ingredients.length > 0,
-            macros: Pie.calculateMacros(ingredients)
-        }
-
-        this.render()
-        this.drawPie()
-    })
 }
 
 Pie.prototype.render = function() {
@@ -91,15 +81,25 @@ Pie.prototype.drawPie = function() {
     }
 }
 
+Pie.prototype.ingredientsChanged = function(ingredients) {
+    this.model = {
+        display: ingredients.length > 0,
+        macros: Pie.calculateMacros(ingredients)
+    }
+
+    this.render()
+    this.drawPie()
+}
+
 Pie.calculateMacros = function(ingredients) {
     let sumCh = 0
     let sumFat = 0
     let sumProtein = 0
 
     ingredients.forEach((ingredient) => {
-        sumCh += ingredient.amount * ingredient.serving.gram * ingredient.food.nutrients.ch
-        sumFat += ingredient.amount * ingredient.serving.gram * ingredient.food.nutrients.fat
-        sumProtein += ingredient.amount * ingredient.serving.gram * ingredient.food.nutrients.protein
+        sumCh += ingredient.amount * ingredient.serving.gram * ingredient.food.nutrients.ch.amount
+        sumFat += ingredient.amount * ingredient.serving.gram * ingredient.food.nutrients.fat.amount
+        sumProtein += ingredient.amount * ingredient.serving.gram * ingredient.food.nutrients.protein.amount
     })
 
     const sumMacros = sumCh + sumFat + sumProtein

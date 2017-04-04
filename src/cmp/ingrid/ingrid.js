@@ -13,25 +13,6 @@ function Ingrid(container, publish) {
         editingIngredientIndex: -1,
         ingredients: []
     }
-
-    PubSub.subscribe(events.SUGGESTION_SELECT, (eventName, data) => {
-        this.model.loading = true
-        this.render()
-
-        store.getFood(data.id, food => {
-            //PubSub.publish('FOOD_REQUEST_SUCCESS')
-            this.model.ingredients.push(new Ingredient(food, 1, new Serving('g', 1, 1)))
-            this.model.editingIngredientIndex = this.model.ingredients.length - 1
-            this.model.loading = false
-            this.render()
-            const index = this.model.editingIngredientIndex
-            if(index > -1){
-                const input = this.container.querySelector('[data-index="' + index + '"] input')
-                input.focus()
-                input.select()
-            }
-        })
-    })
 }
 
 Ingrid.prototype.render = function() {
@@ -114,7 +95,7 @@ Ingrid.prototype.render = function() {
             ingredient.serving = ingredient.food.servings[parseInt(item.querySelector('select').value)]
             this.model.editingIngredientIndex = -1
             this.render()
-            //PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
+            this.publish({ name: 'ready', data: this.model.ingredients })
         })
     })
 
@@ -122,7 +103,7 @@ Ingrid.prototype.render = function() {
         cancelButton.addEventListener('click', () => {
             this.model.ingredients.splice(parseInt(cancelButton.parentNode.parentNode.dataset.index), 1)
             this.render()
-            this.model.ingredients.length > 0 ? this.publish({ name: 'cancel'}) : this.publish({ name: 'clear' })
+            this.model.ingredients.length > 0 ? this.publish({ name: 'ready', data: this.model.ingredients }) : this.publish({ name: 'clear' })
         })
     })
 
@@ -130,7 +111,7 @@ Ingrid.prototype.render = function() {
         removeButton.addEventListener('click', () => {
             this.model.ingredients.splice(removeButton.parentNode.parentNode.dataset.index, 1)
             this.render()
-            //PubSub.publish(events.INGREDIENTS_CHANGE, this.model.ingredients)
+            this.model.ingredients.length > 1 ? this.publish({ name: 'ready', data: this.model.ingredients }) : this.publish({ name: 'clear' })
         })
     })
 }
@@ -140,7 +121,6 @@ Ingrid.prototype.selectFood = function(id) {
     this.render()
 
     store.getFood(id, food => {
-        //PubSub.publish('FOOD_REQUEST_SUCCESS')
         this.publish({ name: 'load', data: food })
         this.model.ingredients.push(new Ingredient(food, 1, new Serving('g', 1, 1)))
         this.model.editingIngredientIndex = this.model.ingredients.length - 1

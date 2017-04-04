@@ -11,7 +11,7 @@ function Sugar(container, publish) {
     this.container = container
     this.model = {
         loading: false,
-        disabled: false,
+        enabled: true,
         selectedIndex: -1,
         suggestions: []
     }
@@ -29,18 +29,10 @@ function Sugar(container, publish) {
     input.addEventListener('input', this.input.bind(this))
     input.addEventListener('keydown', this.keydown.bind(this))
 
-    PubSub.subscribe(events.INGREDIENTS_CHANGE, () => {
-        input.focus()
-    })
-
-    PubSub.subscribe('FOOD_REQUEST_SUCCESS', () => {
-        sc.gen('reset')
-    })
-
     const actions = {
         blur: {
             entry: () => {
-                this.model.disabled = false
+                this.model.enabled = true
                 this.model.selectedIndex = -1
                 this.model.suggestions = []
                 this.render()
@@ -102,7 +94,7 @@ function Sugar(container, publish) {
                 publish({ name: 'select', data: this.model.suggestions[this.model.selectedIndex].id })
                 //PubSub.publish(events.SUGGESTION_SELECT, this.model.suggestions[this.model.selectedIndex].food)
                 container.querySelector('input').value = ''
-                this.model.disabled = true
+                this.model.enabled = false
                 this.model.suggestions = []
                 this.render()
             }
@@ -221,7 +213,7 @@ function Sugar(container, publish) {
         }
     ]
 
-    sc = new Statechart({ states: states }, { logStatesEnteredAndExited: app.logStatechart })
+    sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
     sc.start()
 
     this.render()
@@ -239,7 +231,7 @@ Sugar.prototype.render = function() {
             </ul>
         {{/if}}`
 
-    this.container.querySelector('input').disabled = this.model.disabled
+    this.container.querySelector('input').disabled = !this.model.enabled
 
     Handlebars.registerHelper('selected', index => {
         return index === this.model.selectedIndex ? ' class="selected"' : ''
@@ -279,6 +271,13 @@ Sugar.prototype.keydown = function(e) {
     }
 
     if(e.key === 'Enter') sc.gen('choose')
+}
+
+Sugar.prototype.setAccess = function(enabled) {
+    this.model.enabled = enabled
+    this.render()
+    sc.gen('reset')
+    this.container.querySelector('input').focus()
 }
 
 module.exports = Sugar
