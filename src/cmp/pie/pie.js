@@ -1,5 +1,4 @@
 const Handlebars = require('handlebars')
-const PubSub = require('pubsub-js')
 const events = require('../../events.js')
 const Macros = require('./macros.js')
 

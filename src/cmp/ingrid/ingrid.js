@@ -1,5 +1,4 @@
 const Handlebars = require('handlebars')
-const PubSub = require('pubsub-js')
 const events = require('../../events.js')
 const Ingredient = require('../../food.js').Ingredient
 const Serving = require('../../food.js').Serving
@@ -95,7 +94,7 @@ Ingrid.prototype.render = function() {
             ingredient.serving = ingredient.food.servings[parseInt(item.querySelector('select').value)]
             this.model.editingIngredientIndex = -1
             this.render()
-            this.publish({ name: 'ready', data: this.model.ingredients })
+            this.publish('ready', this.model.ingredients)
         })
     })
 
@@ -103,14 +102,14 @@ Ingrid.prototype.render = function() {
         cancelButton.addEventListener('click', () => {
             this.model.ingredients.splice(parseInt(cancelButton.parentNode.parentNode.dataset.index), 1)
             this.render()
-            this.model.ingredients.length > 0 ? this.publish({ name: 'ready', data: this.model.ingredients }) : this.publish({ name: 'clear' })
+            this.model.ingredients.length > 0 ? this.publish('ready', this.model.ingredients) : this.publish('clear')
         })
     })
 
     this.container.querySelectorAll('.remove').forEach(removeButton => {
         removeButton.addEventListener('click', () => {
             this.model.ingredients.splice(removeButton.parentNode.parentNode.dataset.index, 1)
-            this.model.ingredients.length > 0 ? this.publish({ name: 'ready', data: this.model.ingredients }) : this.publish({ name: 'clear' })
+            this.model.ingredients.length > 0 ? this.publish('ready', this.model.ingredients) : this.publish('clear')
             this.render()
         })
     })
@@ -121,7 +120,7 @@ Ingrid.prototype.selectFood = function(id) {
     this.render()
 
     store.getFood(id, food => {
-        this.publish({ name: 'load', data: food })
+        this.publish('load', food)
         this.model.ingredients.push(new Ingredient(food, 1, new Serving('g', 1, 1)))
         this.model.editingIngredientIndex = this.model.ingredients.length - 1
         this.model.loading = false

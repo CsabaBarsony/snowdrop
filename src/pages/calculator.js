@@ -5,12 +5,12 @@ const Pie = require('../cmp/pie/pie.js')
 const events = require('../events.js')
 const Statechart = require('scion-core').Statechart
 
-const sugar = new Sugar(document.getElementById('cont-sugar'), event => {
-    sc.gen(event.name, event.data)
+const sugar = new Sugar(document.getElementById('cont-sugar'), (event, data) => {
+    sc.gen(event, data)
 })
 
-const ingrid = new Ingrid(document.getElementById('cont-ingrid'), event => {
-    sc.gen(event.name, event.data)
+const ingrid = new Ingrid(document.getElementById('cont-ingrid'), (event, data) => {
+    sc.gen(event, data)
 })
 
 const pie = new Pie(document.getElementById('cont-pie'))
@@ -27,13 +27,13 @@ const actions = {
         }
     },
     loading: {
-        onEntry: event => {
-            ingrid.selectFood(event.data)
+        onEntry: e => {
+            ingrid.selectFood(e.data)
         }
     },
     filled: {
-        onEntry: event => {
-            pie.ingredientsChanged(event.data)
+        onEntry: e => {
+            pie.ingredientsChanged(e.data)
         }
     }
 }
