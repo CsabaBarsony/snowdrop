@@ -11,6 +11,11 @@ const actions = {
             sugar.setAccess(true)
         }
     },
+    empty: {
+        onEntry: () => {
+            pie.ingredientsChanged([])
+        }
+    },
     loading: {
         onEntry: event => {
             ingrid.selectFood(event.data)
@@ -35,7 +40,8 @@ const states = [
         ],
         states: [
             {
-                id: 'empty'
+                id: 'empty',
+                onEntry: actions.empty.onEntry
             },
             {
                 id: 'filled',

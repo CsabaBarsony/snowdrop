@@ -1,11 +1,8 @@
 const app = require('../../app.js')
 const Statechart = require('scion-core').Statechart
 const Handlebars = require('handlebars')
-const PubSub = require('pubsub-js')
 const events = require('../../events.js')
 const store = require('../../store.js')
-
-let sc
 
 function Sugar(container, publish) {
     this.container = container
@@ -24,10 +21,37 @@ function Sugar(container, publish) {
 
     const input = this.container.querySelector('input')
 
-    input.addEventListener('focus', this.focus.bind(this))
-    input.addEventListener('blur', this.blur.bind(this))
-    input.addEventListener('input', this.input.bind(this))
-    input.addEventListener('keydown', this.keydown.bind(this))
+    input.addEventListener('focus', () => {
+        this.sc.gen('select')
+    })
+
+    input.addEventListener('blur', () => {
+        this.sc.gen('unselect')
+    })
+
+    input.addEventListener('input', e => {
+        if(e.target.value === '') this.sc.gen('clear')
+        else this.sc.gen('type', e.target.value)
+    })
+
+    input.addEventListener('keydown', e => {
+        const firstSelected = cmp => {
+            return cmp.model.selectedIndex === 0
+        }
+
+        const lastSelected = cmp => {
+            return cmp.model.selectedIndex === cmp.model.suggestions.length - 1
+        }
+
+        if(e.key === 'ArrowUp') {
+            firstSelected(this) ? this.sc.gen('bore', 'up') : this.sc.gen('excite', 'up')
+        }
+        else if(e.key === 'ArrowDown') {
+            lastSelected(this) ? this.sc.gen('bore', 'down') : this.sc.gen('excite', 'down')
+        }
+
+        if(e.key === 'Enter') this.sc.gen('choose')
+    })
 
     const actions = {
         blur: {
@@ -48,7 +72,7 @@ function Sugar(container, publish) {
         loading: {
             entry: e => {
                 store.getSuggestions(e.data, suggestions => {
-                    sc.gen('load', suggestions)
+                    this.sc.gen('load', suggestions)
                 })
 
                 this.model.loading = true
@@ -213,8 +237,8 @@ function Sugar(container, publish) {
         }
     ]
 
-    sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
-    sc.start()
+    this.sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
+    this.sc.start()
 
     this.render()
 }
@@ -241,42 +265,10 @@ Sugar.prototype.render = function() {
     this.container.querySelector('.dropdown').innerHTML = template(this.model)
 }
 
-Sugar.prototype.focus = function() {
-    sc.gen('select')
-}
-
-Sugar.prototype.blur = function() {
-    sc.gen('unselect')
-}
-
-Sugar.prototype.input = function(e) {
-    if(e.target.value === '') sc.gen('clear')
-    else sc.gen('type', e.target.value)
-}
-
-Sugar.prototype.keydown = function(e) {
-    const firstSelected = cmp => {
-        return cmp.model.selectedIndex === 0
-    }
-
-    const lastSelected = cmp => {
-        return cmp.model.selectedIndex === cmp.model.suggestions.length - 1
-    }
-
-    if(e.key === 'ArrowUp') {
-        firstSelected(this) ? sc.gen('bore', 'up') : sc.gen('excite', 'up')
-    }
-    else if(e.key === 'ArrowDown') {
-        lastSelected(this) ? sc.gen('bore', 'down') : sc.gen('excite', 'down')
-    }
-
-    if(e.key === 'Enter') sc.gen('choose')
-}
-
 Sugar.prototype.setAccess = function(enabled) {
     this.model.enabled = enabled
     this.render()
-    sc.gen('reset')
+    this.sc.gen('reset')
     this.container.querySelector('input').focus()
 }
 
