@@ -110,8 +110,8 @@ Ingrid.prototype.render = function() {
     this.container.querySelectorAll('.remove').forEach(removeButton => {
         removeButton.addEventListener('click', () => {
             this.model.ingredients.splice(removeButton.parentNode.parentNode.dataset.index, 1)
+            this.model.ingredients.length > 0 ? this.publish({ name: 'ready', data: this.model.ingredients }) : this.publish({ name: 'clear' })
             this.render()
-            this.model.ingredients.length > 1 ? this.publish({ name: 'ready', data: this.model.ingredients }) : this.publish({ name: 'clear' })
         })
     })
 }

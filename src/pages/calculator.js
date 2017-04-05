@@ -5,6 +5,16 @@ const Pie = require('../cmp/pie/pie.js')
 const events = require('../events.js')
 const Statechart = require('scion-core').Statechart
 
+const sugar = new Sugar(document.getElementById('cont-sugar'), event => {
+    sc.gen(event.name, event.data)
+})
+
+const ingrid = new Ingrid(document.getElementById('cont-ingrid'), event => {
+    sc.gen(event.name, event.data)
+})
+
+const pie = new Pie(document.getElementById('cont-pie'))
+
 const actions = {
     input: {
         onEntry: () => {
@@ -85,14 +95,5 @@ const states = [
 ]
 
 const sc = new Statechart({ states: states }, { logStatesEnteredAndExited: true })
+
 sc.start()
-
-const sugar = new Sugar(document.getElementById('cont-sugar'), event => {
-    sc.gen(event.name, event.data)
-})
-
-const ingrid = new Ingrid(document.getElementById('cont-ingrid'), event => {
-    sc.gen(event.name, event.data)
-})
-
-const pie = new Pie(document.getElementById('cont-pie'))

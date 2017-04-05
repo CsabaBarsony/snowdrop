@@ -82,9 +82,11 @@ Pie.prototype.drawPie = function() {
 }
 
 Pie.prototype.ingredientsChanged = function(ingredients) {
+    const hasIngredients = ingredients.length > 0
+
     this.model = {
-        display: ingredients.length > 0,
-        macros: Pie.calculateMacros(ingredients)
+        display: hasIngredients,
+        macros: hasIngredients ? Pie.calculateMacros(ingredients) : null
     }
 
     this.render()
@@ -104,9 +106,9 @@ Pie.calculateMacros = function(ingredients) {
 
     const sumMacros = sumCh + sumFat + sumProtein
 
-    const ch = Math.round(sumCh / sumMacros * 100)
-    const fat = Math.round(sumFat / sumMacros * 100)
-    const protein = Math.round(sumProtein / sumMacros * 100)
+    const ch = Math.round(sumCh / sumMacros * 1000) / 10
+    const fat = Math.round(sumFat / sumMacros * 1000) / 10
+    const protein = Math.round(sumProtein / sumMacros * 1000) / 10
 
     return new Macros(ch, fat, protein)
 }

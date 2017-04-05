@@ -3,6 +3,7 @@ const Statechart = require('scion-core').Statechart
 const Handlebars = require('handlebars')
 const events = require('../../events.js')
 const store = require('../../store.js')
+const placeholder = 'Start typing a food name...'
 
 function Sugar(container, publish) {
     this.container = container
@@ -15,7 +16,7 @@ function Sugar(container, publish) {
 
     this.container.innerHTML = `
         <div class="cmp sugar">
-            <input type="text" placeholder="Start typing a food name..." autofocus />
+            <input type="text" placeholder="${placeholder}" autofocus />
             <div class="dropdown"></div>
         </div>`
 
@@ -116,7 +117,6 @@ function Sugar(container, publish) {
         chosen: {
             entry: () => {
                 publish({ name: 'select', data: this.model.suggestions[this.model.selectedIndex].id })
-                //PubSub.publish(events.SUGGESTION_SELECT, this.model.suggestions[this.model.selectedIndex].food)
                 container.querySelector('input').value = ''
                 this.model.enabled = false
                 this.model.suggestions = []
@@ -255,7 +255,9 @@ Sugar.prototype.render = function() {
             </ul>
         {{/if}}`
 
-    this.container.querySelector('input').disabled = !this.model.enabled
+    const input = this.container.querySelector('input')
+    input.disabled = !this.model.enabled
+    input.placeholder = this.model.enabled ? placeholder : ''
 
     Handlebars.registerHelper('selected', index => {
         return index === this.model.selectedIndex ? ' class="selected"' : ''
