@@ -1,13 +1,16 @@
 const React = require('react')
 
-const Iris = React.createClass({
-    getInitialState: function() {
-        return {
+class Iris extends React.Component{
+    constructor() {
+        super()
+
+        this.state = {
             loading: false,
             editingIngredientIndex: -1
         }
-    },
-    render: function() {
+    }
+
+    render() {
         const row = <tr></tr>
 
         const editingRow = <tr></tr>
@@ -17,10 +20,11 @@ const Iris = React.createClass({
         </table>)
 
         return this.state.loading ? <div>loading...</div> : ingredientList
-    },
-    save: function(e) {
+    }
+
+    save(e) {
         console.log(e.target)
     }
-})
+}
 
 module.exports = Iris

@@ -8,21 +8,22 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const Iris = require('../cmp/iris/iris.js')
 
-const iris = React.createElement(Iris, { publish: e => { console.log('iris publish') } })
+class Calculator extends React.Component{
+    constructor() {
+        super()
 
-const Calculator = React.createClass({
-    getInitialState: function() {
-        return {
+        this.state = {
             ingredients: [],
             loading: false
         }
-    },
-    componentDidMount: function() {
+    }
+
+    componentDidMount() {
         const states = [
             {
                 id: 'empty',
                 onEntry: e => {
-                    let x = this
+
                 },
                 transitions: [
                     {
@@ -39,13 +40,14 @@ const Calculator = React.createClass({
         const sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
 
         sc.start()
-    },
-    render: function() {
+    }
+
+    render() {
         return <Iris
             ingredients={this.state.ingredients}
             loading={this.state.loading} />
     }
-})
+}
 
 /*const actions = {
     input: {
