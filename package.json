@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "karma start",
-    "compile": "browserify src/pages/calculator.js -o public/js/calculator.js -d",
-    "watch": "watchify src/pages/calculator.js -o public/js/calculator.js -d"
+    "compile": "browserify -t [ babelify --presets [ react ] ]  src/pages/calculator.js -o public/js/calculator.js -d",
+    "watch": "watchify -t [ babelify --presets [ react ] ]  src/pages/calculator.js -o public/js/calculator.js -d"
   },
   "author": "CsabaBarsony",
   "license": "ISC",
   "dependencies": {
+    "babel-preset-react": "^6.24.1",
+    "babelify": "^7.3.0",
     "browserify": "^14.1.0",
     "express": "^4.15.2",
     "handlebars": "^4.0.6",

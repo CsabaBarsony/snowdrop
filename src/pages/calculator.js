@@ -4,18 +4,50 @@ const Ingrid = require('../cmp/ingrid/ingrid.js')
 const Pie = require('../cmp/pie/pie.js')
 const events = require('../events.js')
 const Statechart = require('scion-core').Statechart
+const React = require('react')
+const ReactDOM = require('react-dom')
+const Iris = require('../cmp/iris/iris.js')
 
-const sugar = new Sugar(document.getElementById('cont-sugar'), (event, data) => {
-    sc.gen(event, data)
+const iris = React.createElement(Iris, { publish: e => { console.log('iris publish') } })
+
+const Calculator = React.createClass({
+    getInitialState: function() {
+        return {
+            ingredients: [],
+            loading: false
+        }
+    },
+    componentDidMount: function() {
+        const states = [
+            {
+                id: 'empty',
+                onEntry: e => {
+                    let x = this
+                },
+                transitions: [
+                    {
+                        event: 'select',
+                        target: 'loading'
+                    }
+                ]
+            },
+            {
+                id: 'loading'
+            }
+        ]
+
+        const sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
+
+        sc.start()
+    },
+    render: function() {
+        return <Iris
+            ingredients={this.state.ingredients}
+            loading={this.state.loading} />
+    }
 })
 
-const ingrid = new Ingrid(document.getElementById('cont-ingrid'), (event, data) => {
-    sc.gen(event, data)
-})
-
-const pie = new Pie(document.getElementById('cont-pie'))
-
-const actions = {
+/*const actions = {
     input: {
         onEntry: () => {
             sugar.setAccess(true)
@@ -94,6 +126,18 @@ const states = [
     }
 ]
 
-const sc = new Statechart({ states: states }, { logStatesEnteredAndExited: true })
+const sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
 
 sc.start()
+
+const sugar = new Sugar(document.getElementById('cont-sugar'), (event, data) => {
+    sc.gen(event, data)
+})
+
+const ingrid = new Ingrid(document.getElementById('cont-ingrid'), (event, data) => {
+    sc.gen(event, data)
+})
+
+const pie = new Pie(document.getElementById('cont-pie'))*/
+
+ReactDOM.render(<Calculator />, document.getElementById('cont-calculator'))
