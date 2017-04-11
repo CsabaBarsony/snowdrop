@@ -1,5 +1,5 @@
 const app = require('../app.js')
-const Sugar = require('../cmp/sugar/sugar.js')
+const Sugar = require('../cmp/sugar_react/sugar.js')
 const Ingrid = require('../cmp/ingrid/ingrid.js')
 const Pie = require('../cmp/pie/pie.js')
 const events = require('../events.js')
@@ -45,7 +45,8 @@ class Calculator extends React.Component{
     render() {
         return <Iris
             ingredients={this.state.ingredients}
-            loading={this.state.loading} />
+            loading={this.state.loading} />,
+            <Sugar />
     }
 }
 
