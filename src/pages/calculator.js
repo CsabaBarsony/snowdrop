@@ -1,4 +1,5 @@
 const app = require('../app.js')
+const store = require('../store.js')
 const Sugar = require('../cmp/sugar_react/sugar.js')
 const Ingrid = require('../cmp/ingrid/ingrid.js')
 const Pie = require('../cmp/pie/pie.js')
@@ -7,6 +8,8 @@ const Statechart = require('scion-core').Statechart
 const React = require('react')
 const ReactDOM = require('react-dom')
 const Iris = require('../cmp/iris/iris.js')
+const Ingredient = require('../food.js').Ingredient
+const Serving = require('../food.js').Serving
 
 class Calculator extends React.Component{
     constructor() {
@@ -14,7 +17,8 @@ class Calculator extends React.Component{
 
         this.state = {
             ingredients: [],
-            loading: false
+            loading: false,
+            foodSearchEnabled: true
         }
     }
 
@@ -43,10 +47,34 @@ class Calculator extends React.Component{
     }
 
     render() {
-        return <Iris
-            ingredients={this.state.ingredients}
-            loading={this.state.loading} />,
-            <Sugar />
+        return (
+            <div>
+                <Sugar
+                    foodSelect={this.onFoodSelect.bind(this)}
+                    enabled={this.state.foodSearchEnabled} />
+                <Iris
+                    ingredients={this.state.ingredients}
+                    loading={this.state.loading}
+                    editIngredient={this.onEditIngredient.bind(this)} />
+            </div>)
+    }
+
+    onFoodSelect(e) {
+        this.setState({
+            foodSearchEnabled: false,
+            loading: true
+        })
+
+        store.getFood(e.data, food => {
+            this.setState({
+                ingredients: [...this.state.ingredients, new Ingredient(food, 1, new Serving('g', 1, 1))],
+                loading: false
+            })
+        })
+    }
+
+    onEditIngredient(a, b, c, d) {
+        let x = 0
     }
 }
 

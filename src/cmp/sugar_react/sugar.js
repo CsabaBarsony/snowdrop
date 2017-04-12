@@ -74,7 +74,7 @@ class Sugar extends React.Component {
             },
             chosen: {
                 entry: () => {
-                    this.props.publish({ name: 'select', data: this.state.suggestions[this.state.selectedIndex].id })
+                    this.props.foodSelect({ name: 'select', data: this.state.suggestions[this.state.selectedIndex].id })
                     this.setState({
                         text: '',
                         enabled: false,
@@ -204,10 +204,16 @@ class Sugar extends React.Component {
     }
 
     render() {
+        const isSelected = index => {
+            return index === this.state.selectedIndex
+        }
+
+        const x = true
+
         const suggestionList = this.state.suggestions.length === 0 ? '' : (
             <ul>
                 {this.state.suggestions.map((suggestion, index) => {
-                    return <li key={index}>{suggestion.name}</li>
+                    return <li key={index} className={isSelected(index) ? 'selected' : ''}>{suggestion.name}</li>
                 })}
             </ul>
         )
@@ -220,11 +226,12 @@ class Sugar extends React.Component {
                     type="text"
                     value={this.state.text}
                     placeholder={placeholder}
+                    disabled={!this.props.enabled}
                     onFocus={this.onFocus.bind(this)}
                     onBlur={this.onBlur.bind(this)}
                     onChange={this.onChange.bind(this)}
                     onKeyDown={this.onKeyDown.bind(this)} />
-                <div className="dropdown"></div>
+                <div className="dropdown">{content}</div>
             </div>)
     }
 
@@ -233,13 +240,24 @@ class Sugar extends React.Component {
     }
 
     onKeyDown(e) {
-        switch(e.key) {
-            case 'Enter':
-                break
-            case 'ArrowUp':
-                break
-            case 'ArrowDown':
-                break
+        if(e.key === 'Enter') {
+            this.sc.gen('choose')
+        }
+        else {
+            const firstSelected = cmp => {
+                return this.state.selectedIndex === 0
+            }
+
+            const lastSelected = cmp => {
+                return this.state.selectedIndex === this.state.suggestions.length - 1
+            }
+
+            if(e.key === 'ArrowUp') {
+                firstSelected(this) ? this.sc.gen('bore', 'up') : this.sc.gen('excite', 'up')
+            }
+            else if(e.key === 'ArrowDown') {
+                lastSelected(this) ? this.sc.gen('bore', 'down') : this.sc.gen('excite', 'down')
+            }
         }
     }
 
