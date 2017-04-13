@@ -1,14 +1,6 @@
 const React = require('react')
 
 class Iris extends React.Component{
-    constructor() {
-        super()
-
-        this.state = {
-            editingIngredientIndex: 0
-        }
-    }
-
     render() {
         const displayServing = serving => {
             return (serving.amount !== 1 ? serving.amount : '') + serving.name
@@ -22,7 +14,7 @@ class Iris extends React.Component{
         }
 
         const rows = this.props.ingredients.map((ingredient, index) => {
-            if(index === this.state.editingIngredientIndex) {
+            if(this.props.editing) {
                 const options = ingredient.food.servings.map((serving, index) => {
                     return <option key={index} value={index}>{displayServing(serving)}</option>
                 })
@@ -49,7 +41,7 @@ class Iris extends React.Component{
                             <span>{ingredient.food.name}</span>
                         </td>
                         <td>
-                            <span>{displayAmount(ingredient.amount, ingredient.serving.amount)}</span>
+                            <span>{displayAmount(ingredient.amount, ingredient.serving)}</span>
                         </td>
                         <td>
                             <button className="remove">remove</button>
@@ -68,11 +60,10 @@ class Iris extends React.Component{
     onSave(e) {
         const amount = parseInt(e.target.parentNode.parentNode.querySelector('input').value)
         const servingIndex = parseInt(e.target.parentNode.parentNode.querySelector('select').value)
-        const ingredient = this.props.ingredients[this.state.editingIngredientIndex]
+        const ingredient = this.props.ingredients[this.props.ingredients.length - 1]
         const serving = ingredient.food.servings[servingIndex]
         
-        this.props.editIngredient(this.state.editingIngredientIndex, amount, serving)
-        this.setState({ editingIngredientIndex: -1 })
+        this.props.editIngredient(amount, serving)
     }
 
     cancel(e) {

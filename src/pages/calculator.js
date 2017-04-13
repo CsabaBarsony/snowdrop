@@ -12,26 +12,6 @@ const Ingredient = require('../food.js').Ingredient
 const Serving = require('../food.js').Serving
 const update = require('immutability-helper')
 
-const state = {
-    foods: [
-        {
-            name: 'avocado'
-        },
-        {
-            name: 'broccoli'
-        }
-    ]
-}
-
-const av = state.foods[0]
-
-const newFood = {
-    name: 'cocoa'
-}
-
-const x = update(state, { foods: { [1]: { $set: newFood } } })
-newFood.name = 'xxx'
-
 class Calculator extends React.Component{
     constructor() {
         super()
@@ -39,7 +19,7 @@ class Calculator extends React.Component{
         this.state = {
             ingredients: [],
             loading: false,
-            foodSearchEnabled: true
+            editing: false
         }
     }
 
@@ -72,10 +52,11 @@ class Calculator extends React.Component{
             <div>
                 <Sugar
                     foodSelect={this.onFoodSelect.bind(this)}
-                    enabled={this.state.foodSearchEnabled} />
+                    enabled={!this.state.editing} />
                 <Iris
                     ingredients={this.state.ingredients}
                     loading={this.state.loading}
+                    editing={this.state.editing}
                     editIngredient={this.onEditIngredient.bind(this)} />
             </div>)
     }
@@ -89,13 +70,17 @@ class Calculator extends React.Component{
         store.getFood(e.data, food => {
             this.setState({
                 ingredients: [...this.state.ingredients, new Ingredient(food, 1, new Serving('g', 1, 1))],
-                loading: false
+                loading: false,
+                editing: true
             })
         })
     }
 
-    onEditIngredient(index, amount, serving) {
+    onEditIngredient(amount, serving) {
+        const index = this.state.ingredients.length - 1
+
         this.setState({
+            editing: false,
             ingredients: update(this.state.ingredients, {[index]: {
                 amount: {
                     $set: amount
