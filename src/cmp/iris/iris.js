@@ -70,9 +70,9 @@ class Iris extends React.Component{
         const servingIndex = parseInt(e.target.parentNode.parentNode.querySelector('select').value)
         const ingredient = this.props.ingredients[this.state.editingIngredientIndex]
         const serving = ingredient.food.servings[servingIndex]
-        ingredient.serving = serving
-        ingredient.amount = amount
-        this.props.editIngredient(amount, serving)
+        
+        this.props.editIngredient(this.state.editingIngredientIndex, amount, serving)
+        this.setState({ editingIngredientIndex: -1 })
     }
 
     cancel(e) {

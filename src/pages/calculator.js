@@ -10,6 +10,27 @@ const ReactDOM = require('react-dom')
 const Iris = require('../cmp/iris/iris.js')
 const Ingredient = require('../food.js').Ingredient
 const Serving = require('../food.js').Serving
+const update = require('immutability-helper')
+
+const state = {
+    foods: [
+        {
+            name: 'avocado'
+        },
+        {
+            name: 'broccoli'
+        }
+    ]
+}
+
+const av = state.foods[0]
+
+const newFood = {
+    name: 'cocoa'
+}
+
+const x = update(state, { foods: { [1]: { $set: newFood } } })
+newFood.name = 'xxx'
 
 class Calculator extends React.Component{
     constructor() {
@@ -73,8 +94,17 @@ class Calculator extends React.Component{
         })
     }
 
-    onEditIngredient(a, b, c, d) {
-        let x = 0
+    onEditIngredient(index, amount, serving) {
+        this.setState({
+            ingredients: update(this.state.ingredients, {[index]: {
+                amount: {
+                    $set: amount
+                },
+                serving: {
+                    $set: serving
+                }
+            }})
+        })
     }
 }
 
