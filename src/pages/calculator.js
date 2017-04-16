@@ -23,65 +23,40 @@ class Calculator extends React.Component{
         }
     }
 
-    componentDidMount() {
-        const states = [
-            {
-                id: 'empty',
-                onEntry: e => {
-
-                },
-                transitions: [
-                    {
-                        event: 'select',
-                        target: 'loading'
-                    }
-                ]
-            },
-            {
-                id: 'loading'
-            }
-        ]
-
-        const sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
-
-        sc.start()
-    }
-
     render() {
         return (
             <div>
                 <Sugar
                     foodSelect={this.onFoodSelect.bind(this)}
-                    enabled={!this.state.editing} />
+                    foodLoad={this.onFoodLoad.bind(this)} />
                 <Iris
                     ingredients={this.state.ingredients}
                     loading={this.state.loading}
                     editing={this.state.editing}
-                    editIngredient={this.onEditIngredient.bind(this)} />
+                    edit={this.onEditIngredient.bind(this)}
+                    remove={this.onRemoveIngredient.bind(this)} />
             </div>)
     }
 
-    onFoodSelect(e) {
+    onFoodSelect() {
         this.setState({
             foodSearchEnabled: false,
             loading: true
         })
+    }
 
-        store.getFood(e.data, food => {
-            this.setState({
-                ingredients: [...this.state.ingredients, new Ingredient(food, 1, new Serving('g', 1, 1))],
-                loading: false,
-                editing: true
-            })
+    onFoodLoad(food) {
+        this.setState({
+            ingredients: [...this.state.ingredients, new Ingredient(food, 1, new Serving('g', 1, 1))],
+            loading: false,
+            editing: true
         })
     }
 
     onEditIngredient(amount, serving) {
-        const index = this.state.ingredients.length - 1
-
         this.setState({
             editing: false,
-            ingredients: update(this.state.ingredients, {[index]: {
+            ingredients: update(this.state.ingredients, {[this.state.ingredients.length - 1]: {
                 amount: {
                     $set: amount
                 },
@@ -89,6 +64,12 @@ class Calculator extends React.Component{
                     $set: serving
                 }
             }})
+        })
+    }
+
+    onRemoveIngredient(index) {
+        this.setState({
+            ingredients: update(this.state.ingredients, { $splice: [[index, 1]] })
         })
     }
 }

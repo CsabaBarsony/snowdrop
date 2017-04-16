@@ -10,26 +10,25 @@ class Sugar extends React.Component {
         this.state = {
             text: '',
             loading: false,
+            enabled: true,
             selectedIndex: -1,
             suggestions: []
         }
 
         const actions = {
             blur: {
-                entry: () => {
-                    this.setState({
-                        selectedIndex: -1,
-                        suggestions: []
-                    })
-                }
+                entry: () => this.setState({
+                    enabled: true,
+                    selectedIndex: -1,
+                    suggestions: []
+                })
             },
             hidden: {
-                entry: () => {
-                    this.setState({
-                        selectedIndex: -1,
-                        suggestions: []
-                    })
-                }
+                entry: () => this.setState({
+                    text: '',
+                    selectedIndex: -1,
+                    suggestions: []
+                })
             },
             loading: {
                 entry: e => {
@@ -42,19 +41,13 @@ class Sugar extends React.Component {
                         loading: true
                     })
                 },
-                exit: () => {
-                    this.setState({ loading: false })
-                }
+                exit: () => this.setState({ loading: false })
             },
             suggesting: {
-                entry: e => {
-                    this.setState({ suggestions: e.data })
-                }
+                entry: e => this.setState({ suggestions: e.data })
             },
             typing: {
-                entry: () => {
-                    this.setState({ selectedIndex: -1 })
-                }
+                entry: () => this.setState({ selectedIndex: -1 })
             },
             excited: {
                 entry: e => {
@@ -74,11 +67,16 @@ class Sugar extends React.Component {
             },
             chosen: {
                 entry: () => {
-                    this.props.foodSelect({ name: 'select', data: this.state.suggestions[this.state.selectedIndex].id })
+                    this.props.foodSelect()
                     this.setState({
                         text: '',
                         enabled: false,
                         suggestions: []
+                    })
+
+                    store.getFood(this.state.suggestions[this.state.selectedIndex].id, food => {
+                        this.props.foodLoad(food)
+                        this.sc.gen('reset')
                     })
                 }
             }
@@ -204,17 +202,13 @@ class Sugar extends React.Component {
     }
 
     render() {
-        const isSelected = index => {
-            return index === this.state.selectedIndex
-        }
-
-        const x = true
+        const isSelected = index => index === this.state.selectedIndex
 
         const suggestionList = this.state.suggestions.length === 0 ? '' : (
             <ul>
-                {this.state.suggestions.map((suggestion, index) => {
-                    return <li key={index} className={isSelected(index) ? 'selected' : ''}>{suggestion.name}</li>
-                })}
+                {this.state.suggestions.map((suggestion, index) =>
+                    <li key={index} className={isSelected(index) ? 'selected' : ''}>{suggestion.name}</li>
+                )}
             </ul>
         )
 
@@ -226,7 +220,7 @@ class Sugar extends React.Component {
                     type="text"
                     value={this.state.text}
                     placeholder={placeholder}
-                    disabled={!this.props.enabled}
+                    disabled={!this.state.enabled}
                     onFocus={this.onFocus.bind(this)}
                     onBlur={this.onBlur.bind(this)}
                     onChange={this.onChange.bind(this)}
@@ -236,7 +230,8 @@ class Sugar extends React.Component {
     }
 
     onChange(e) {
-        this.sc.gen('type', e.target.value)
+        if(e.target.value === '') this.sc.gen('clear')
+        else this.sc.gen('type', e.target.value)
     }
 
     onKeyDown(e) {
@@ -244,13 +239,8 @@ class Sugar extends React.Component {
             this.sc.gen('choose')
         }
         else {
-            const firstSelected = cmp => {
-                return this.state.selectedIndex === 0
-            }
-
-            const lastSelected = cmp => {
-                return this.state.selectedIndex === this.state.suggestions.length - 1
-            }
+            const firstSelected = () => this.state.selectedIndex === 0
+            const lastSelected = () => this.state.selectedIndex === this.state.suggestions.length - 1
 
             if(e.key === 'ArrowUp') {
                 firstSelected(this) ? this.sc.gen('bore', 'up') : this.sc.gen('excite', 'up')

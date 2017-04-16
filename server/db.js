@@ -63,7 +63,7 @@ module.exports = {
     getSuggestions: (text, callback) => {
         nutrientDB.query(
             queries[dataSource].getSuggestions,
-            ['%' + text + '%'], (error, rows) => {
+            [text + '%'], (error, rows) => {
                 if(!error) {
                     callback(true, rows.map(row => {
                         return {
