@@ -2,19 +2,19 @@ const app = require('../app.js')
 const store = require('../store.js')
 const Sugar = require('../cmp/sugar_react/sugar.js')
 const Ingrid = require('../cmp/ingrid/ingrid.js')
-const Pie = require('../cmp/pie/pie.js')
+const Pie = require('../cmp/pie_react/pie.js')
 const events = require('../events.js')
-const Statechart = require('scion-core').Statechart
+const { Statechart } = require('scion-core')
 const React = require('react')
 const ReactDOM = require('react-dom')
 const Iris = require('../cmp/iris/iris.js')
-const Ingredient = require('../food.js').Ingredient
-const Serving = require('../food.js').Serving
+const { Ingredient } = require('../food.js')
+const { Serving } = require('../food.js')
 const update = require('immutability-helper')
 
 class Calculator extends React.Component{
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
 
         this.state = {
             ingredients: [],
@@ -35,6 +35,7 @@ class Calculator extends React.Component{
                     editing={this.state.editing}
                     edit={this.onEditIngredient.bind(this)}
                     remove={this.onRemoveIngredient.bind(this)} />
+                {this.state.editing ? null : <Pie ingredients={this.state.ingredients} />}
             </div>)
     }
 

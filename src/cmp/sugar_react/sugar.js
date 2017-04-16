@@ -1,4 +1,4 @@
-const Statechart = require('scion-core').Statechart
+const { Statechart } = require('scion-core')
 const store = require('../../store.js')
 const React = require('react')
 const placeholder = 'Start typing a food name...'
@@ -194,7 +194,7 @@ class Sugar extends React.Component {
             }
         ]
 
-        this.sc = new Statechart({ states: states }, { logStatesEnteredAndExited: true })
+        this.sc = new Statechart({ states: states }, { logStatesEnteredAndExited: false })
     }
 
     componentDidMount() {
