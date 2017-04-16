@@ -51,17 +51,17 @@ class Sugar extends React.Component {
             },
             excited: {
                 entry: e => {
-                    if(e.data === 'up'){
-                        if(this.state.selectedIndex === -1){
+                    if(e.data === 'up') {
+                        if(this.state.selectedIndex === -1)
                             this.setState({ selectedIndex: this.state.suggestions.length - 1 })
-                        }
-                        else{
+                        else
                             this.setState({ selectedIndex: this.state.selectedIndex - 1})
-                        }
                     }
-                    else{
-                        if(this.state.selectedIndex === this.state.suggestions.length - 1) this.setState({ selectedIndex: -1 })
-                        this.setState({ selectedIndex: this.state.selectedIndex + 1})
+                    else {
+                        if(this.state.selectedIndex === this.state.suggestions.length - 1)
+                            this.setState({ selectedIndex: -1 })
+                        else
+                            this.setState({ selectedIndex: this.state.selectedIndex + 1})
                     }
                 }
             },
@@ -202,15 +202,12 @@ class Sugar extends React.Component {
     }
 
     render() {
-        const isSelected = index => index === this.state.selectedIndex
+        const suggestionItems = this.state.suggestions.map((suggestion, index) =>
+            <li key={index} className={index === this.state.selectedIndex ? 'selected' : ''}>
+                {suggestion.name}
+            </li>)
 
-        const suggestionList = this.state.suggestions.length === 0 ? '' : (
-            <ul>
-                {this.state.suggestions.map((suggestion, index) =>
-                    <li key={index} className={isSelected(index) ? 'selected' : ''}>{suggestion.name}</li>
-                )}
-            </ul>
-        )
+        const suggestionList = this.state.suggestions.length === 0 ? '' : <ul>{suggestionItems}</ul>
 
         const content = this.state.loading ? <div>loading...</div> : suggestionList
 
@@ -242,12 +239,10 @@ class Sugar extends React.Component {
             const firstSelected = () => this.state.selectedIndex === 0
             const lastSelected = () => this.state.selectedIndex === this.state.suggestions.length - 1
 
-            if(e.key === 'ArrowUp') {
+            if(e.key === 'ArrowUp')
                 firstSelected(this) ? this.sc.gen('bore', 'up') : this.sc.gen('excite', 'up')
-            }
-            else if(e.key === 'ArrowDown') {
+            else if(e.key === 'ArrowDown')
                 lastSelected(this) ? this.sc.gen('bore', 'down') : this.sc.gen('excite', 'down')
-            }
         }
     }
 

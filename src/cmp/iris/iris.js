@@ -10,7 +10,9 @@ class Iris extends React.Component{
             (serving.name !== 'g' ? ' (' + (serving.gram * amount) + 'g)' : '')
 
         const rows = this.props.ingredients.map((ingredient, index) => {
-            if(this.props.editing && index === this.props.ingredients.length - 1) {
+            const editingRow = this.props.editing && index === this.props.ingredients.length - 1
+
+            if(editingRow) {
                 const options = ingredient.food.servings.map((serving, index) =>
                     <option key={index} value={index}>{displayServing(serving)}</option>
                 )
@@ -46,9 +48,10 @@ class Iris extends React.Component{
             }
         })
 
-        const ingredientList = (<table className="cmp ingrid">
-            <tbody>{rows}</tbody>
-        </table>)
+        const ingredientList = (
+            <table className="cmp ingrid">
+                <tbody>{rows}</tbody>
+            </table>)
 
         return this.props.loading ? <div>loading...</div> : ingredientList
     }

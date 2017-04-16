@@ -102,11 +102,11 @@ function Sugar(container, publish) {
                     if(this.model.selectedIndex === -1){
                         this.model.selectedIndex = this.model.suggestions.length - 1
                     }
-                    else{
+                    else {
                         this.model.selectedIndex--
                     }
                 }
-                else{
+                else {
                     if(this.model.selectedIndex === this.model.suggestions.length - 1) this.model.selectedIndex = -1
                     this.model.selectedIndex++
                 }
