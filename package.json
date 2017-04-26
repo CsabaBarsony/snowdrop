@@ -6,7 +6,7 @@
   "scripts": {
     "test": "karma start",
     "compile": "browserify -t [ babelify --presets [ react ] ]  src/pages/calculator.js -o public/js/calculator.js -d",
-    "watch": "watchify -t [ babelify --presets [ react es2017 ] ]  src/pages/calculator.js -o public/js/calculator.js -d"
+    "watch": "watchify -t [ babelify --presets [ react es2017 ] ]  src/pages/list.js -o public/js/list.js -d"
   },
   "author": "CsabaBarsony",
   "license": "ISC",
@@ -27,6 +27,8 @@
     "pubsub-js": "^1.5.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-redux": "^5.0.4",
+    "redux": "^3.6.0",
     "scion-core": "^1.2.1",
     "watchify": "^3.9.0"
   },
