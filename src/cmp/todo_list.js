@@ -1,0 +1,25 @@
+const PropTypes = require('prop-types')
+const Todo = require('./todo.js')
+
+const TodoList = ({ todos, onTodoClick }) => (
+    <ul>
+        {todos.map(todo =>
+            <Todo
+                key={todo.id}
+                {...todo}
+                onClick={() => onTodoClick(todo.id)}
+            />
+        )}
+    </ul>
+)
+
+TodoList.propTypes = {
+    todos: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        completed: PropTypes.bool.isRequired,
+        text: PropTypes.string.isRequired
+    }).isRequired).isRequired,
+    onTodoClick: PropTypes.func.isRequired
+}
+
+module.exports = TodoList

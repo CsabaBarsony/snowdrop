@@ -103,3 +103,7 @@ button:hover {
     background-image: linear-gradient(to bottom, #6ca89a, #588C7E);
     text-decoration: none;
 }
+
+.cont {
+    padding: 20px;
+}

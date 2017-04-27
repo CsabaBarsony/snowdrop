@@ -26,16 +26,22 @@ class Calculator extends React.Component{
     render() {
         return (
             <div>
-                <Sugar
-                    foodSelect={this.onFoodSelect.bind(this)}
-                    foodLoad={this.onFoodLoad.bind(this)} />
-                <Iris
-                    ingredients={this.state.ingredients}
-                    loading={this.state.loading}
-                    editing={this.state.editing}
-                    edit={this.onEditIngredient.bind(this)}
-                    remove={this.onRemoveIngredient.bind(this)} />
-                {this.state.editing ? null : <Pie ingredients={this.state.ingredients} />}
+                <div className="cont">
+                    <Sugar
+                        foodSelect={this.onFoodSelect.bind(this)}
+                        foodLoad={this.onFoodLoad.bind(this)} />
+                </div>
+                <div className="cont resp-2">
+                    <Iris
+                        ingredients={this.state.ingredients}
+                        loading={this.state.loading}
+                        editing={this.state.editing}
+                        edit={this.onEditIngredient.bind(this)}
+                        remove={this.onRemoveIngredient.bind(this)} />
+                </div>
+                <div className="cont resp-2">
+                    {this.state.editing ? null : <Pie ingredients={this.state.ingredients} />}
+                </div>
             </div>)
     }
 
