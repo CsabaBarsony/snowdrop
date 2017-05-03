@@ -1,3 +1,4 @@
+const React = require('react')
 const actions = require('../../actions.js')
 const { connect } = require('react-redux')
 

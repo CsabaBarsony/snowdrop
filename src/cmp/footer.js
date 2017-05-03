@@ -1,3 +1,6 @@
+const React = require('react')
+const FilterLink = require('./containers/filter_link.js')
+
 const Footer = () => (
     <p>
         Show:
@@ -15,3 +18,5 @@ const Footer = () => (
         </FilterLink>
     </p>
 )
+
+module.exports = Footer

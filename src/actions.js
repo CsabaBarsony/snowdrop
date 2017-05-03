@@ -1,3 +1,5 @@
+let nextTodoId = 1
+
 const actions = {
     todo: {
         add: text => {
