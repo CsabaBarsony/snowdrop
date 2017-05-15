@@ -6,7 +6,7 @@
   "scripts": {
     "test": "karma start",
     "compile": "browserify -t [ babelify --presets [ react ] ]  src/pages/calculator.js -o public/js/calculator.js -d",
-    "watch": "watchify -t [ babelify --presets [ react es2017 ] ]  src/pages/list.js -o public/js/list.js -d"
+    "watch": "watchify -t [ babelify --presets [ react es2017 ] ]  src/redstar/redstar.js -o public/js/redstar.js -d"
   },
   "author": "CsabaBarsony",
   "license": "ISC",
